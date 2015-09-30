@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="menu_flash" type="id">flash</item>
+    <item name="menu_auto_focus" type="id">focus</item>
+    <item name="menu_formats" type="id">formats</item>
+    <item name="menu_camera_selector" type="id">selector</item>
+    <item name="menu_Select_scan" type="id">select_scan</item>
+</resources>

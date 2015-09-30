@@ -7,9 +7,11 @@
 package com.mifos.mifosxdroid.online;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,9 +51,9 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.mifos.utils.FragmentConstants.*;
 
 public class CreateNewClientFragment extends Fragment implements MFDatePicker.OnDatePickListener {
-
 
     @InjectView(R.id.et_client_first_name)
     EditText et_clientFirstName;
@@ -69,22 +71,25 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
     Spinner sp_offices;
     @InjectView(R.id.bt_submit)
     Button bt_submit;
+    @InjectView(R.id.bt_scan)
+    Button bt_scan;
+
 
     int officeId;
     Boolean result = true;
-    private DialogFragment mfDatePicker;
     View rootView;
     String dateString;
-    private HashMap<String, Integer> officeNameIdHashMap = new HashMap<String, Integer>();
     SafeUIBlockingUtility safeUIBlockingUtility;
+    private DialogFragment mfDatePicker;
+    private HashMap<String, Integer> officeNameIdHashMap = new HashMap<String, Integer>();
+
+    public CreateNewClientFragment() {
+        // Required empty public constructor
+    }
 
     public static CreateNewClientFragment newInstance() {
         CreateNewClientFragment createNewClientFragment = new CreateNewClientFragment();
         return createNewClientFragment;
-    }
-
-    public CreateNewClientFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -97,11 +102,17 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_create_new_client, null);
+        rootView = inflater.inflate(R.layout.fragment_create_new_client, container, false);
         ButterKnife.inject(this, rootView);
         inflateOfficeSpinner();
         inflateSubmissionDate();
-
+        //handle when scan Aadhar button is clicked
+        bt_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadAadharScanner();
+            }
+        });
         //client active checkbox onCheckedListener
         cb_clientActiveStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -142,41 +153,41 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
         safeUIBlockingUtility.safelyBlockUI();
         ((MifosApplication) getActivity().getApplicationContext()).api.officeService.getAllOffices(new Callback<List<Office>>() {
 
-               @Override
-               public void success(List<Office> offices, Response response) {
-                   final List<String> officeList = new ArrayList<String>();
+                                                                                                       @Override
+                                                                                                       public void success(List<Office> offices, Response response) {
+                                                                                                           final List<String> officeList = new ArrayList<String>();
 
-                   for (Office office : offices) {
-                       officeList.add(office.getName());
-                       officeNameIdHashMap.put(office.getName(), office.getId());
-                   }
-                   ArrayAdapter<String> officeAdapter = new ArrayAdapter<String>(getActivity(),
-                           android.R.layout.simple_spinner_item, officeList);
-                   officeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                   sp_offices.setAdapter(officeAdapter);
-                   sp_offices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                                                           for (Office office : offices) {
+                                                                                                               officeList.add(office.getName());
+                                                                                                               officeNameIdHashMap.put(office.getName(), office.getId());
+                                                                                                           }
+                                                                                                           ArrayAdapter<String> officeAdapter = new ArrayAdapter<String>(getActivity(),
+                                                                                                                   android.R.layout.simple_spinner_item, officeList);
+                                                                                                           officeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                                                                                           sp_offices.setAdapter(officeAdapter);
+                                                                                                           sp_offices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-                       @Override
-                       public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                           officeId = officeNameIdHashMap.get(officeList.get(i));
-                           Log.d("officeId " + officeList.get(i), String.valueOf(officeId));
+                                                                                                               @Override
+                                                                                                               public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                                                                                                   officeId = officeNameIdHashMap.get(officeList.get(i));
+                                                                                                                   Log.d("officeId " + officeList.get(i), String.valueOf(officeId));
 
-                       }
+                                                                                                               }
 
-                       @Override
-                       public void onNothingSelected(AdapterView<?> adapterView) {
+                                                                                                               @Override
+                                                                                                               public void onNothingSelected(AdapterView<?> adapterView) {
 
-                       }
+                                                                                                               }
 
-                   });
-                   safeUIBlockingUtility.safelyUnBlockUI();
-               }
+                                                                                                           });
+                                                                                                           safeUIBlockingUtility.safelyUnBlockUI();
+                                                                                                       }
 
-               @Override
-               public void failure(RetrofitError error) {
-                   safeUIBlockingUtility.safelyUnBlockUI();
-               }
-            }
+                                                                                                       @Override
+                                                                                                       public void failure(RetrofitError error) {
+                                                                                                           safeUIBlockingUtility.safelyUnBlockUI();
+                                                                                                       }
+                                                                                                   }
         );
     }
 
@@ -223,7 +234,7 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
         tv_submissionDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mfDatePicker.show(getActivity().getSupportFragmentManager(), FragmentConstants.DFRAG_DATE_PICKER);
+                mfDatePicker.show(getActivity().getSupportFragmentManager(), DFRAG_DATE_PICKER);
             }
         });
     }
@@ -303,6 +314,29 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
         return result;
     }
 
+    public void loadAadharScanner() {
+        Intent intent = new Intent(getActivity(), AadharQrcode.class);
+        startActivityForResult(intent, 111);
+    }
+
+    @Override
+    public void onActivityResult(int requestcode, int resultcode, Intent data) {
+        super.onActivityResult(requestcode, resultcode, data);
+        if (requestcode == 111) {
+            if (resultcode == Activity.RESULT_OK) {
+                Bundle resultData = data.getExtras();
+                Bundle bundleOfobject = resultData.getBundle("details");
+                AadharDetail ad = (AadharDetail) bundleOfobject.getSerializable("data");
+                setViews(ad);
+            }
+        }
+
+    }
+    public void setViews(AadharDetail data) {
+        et_clientFirstName = (EditText) rootView.findViewById(R.id.et_client_first_name);
+        et_clientFirstName.setText(data.getName());
+
+    }
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

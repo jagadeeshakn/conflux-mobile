@@ -8,6 +8,7 @@ package com.mifos.mifosxdroid.online;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -18,6 +19,8 @@ import com.mifos.mifosxdroid.OfflineCenterInputActivity;
 import com.mifos.mifosxdroid.R;
 import com.mifos.utils.FragmentConstants;
 
+import javax.net.ssl.SSLContext;
+
 /**
  * Created by ishankhanna on 09/02/14.
  */
@@ -27,22 +30,16 @@ public class DashboardFragmentActivity extends ActionBarActivity {
 
     public final static String TAG = DashboardFragmentActivity.class.getSimpleName();
     public static Context context;
+    ClientSearchFragment clientSearchFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-        ClientSearchFragment clientSearchFragment = new ClientSearchFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.dashboard_global_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
-        fragmentTransaction.commit();
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.client_search, menu);
 
         return super.onCreateOptionsMenu(menu);
@@ -70,6 +67,9 @@ public class DashboardFragmentActivity extends ActionBarActivity {
                 break;
             case R.id.mItem_create_new_client:
                 openCreateClient();
+                break;
+            case R.id.mitem_client_search:
+                openClinetSearch();
 
             default: //DO NOTHING
                 break;
@@ -91,12 +91,20 @@ public class DashboardFragmentActivity extends ActionBarActivity {
     public void openCreateClient(){
         CreateNewClientFragment createNewClientFragment = new CreateNewClientFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+       // fragmentTransaction.add(createNewClientFragment, FragmentConstants.FRAG_CREATE_NEW_CLIENT);;
+       fragmentTransaction.add(R.id.dashboard_global_container, createNewClientFragment, "clientNew");
         fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CREATE_NEW_CLIENT);
-        //fragmentTransaction.add(createNewClientFragment, FragmentConstants.FRAG_CREATE_NEW_CLIENT);
-        fragmentTransaction.replace(R.id.dashboard_global_container, createNewClientFragment);
+        // getSupportFragmentManager().findFragmentByTag("clientNew").setRetainInstance(true);
         fragmentTransaction.commit();
     }
-
+  public void   openClinetSearch(){
+      clientSearchFragment = new ClientSearchFragment();
+      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+     // fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CLIENT_SEARCH);
+      fragmentTransaction.add(R.id.dashboard_global_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
+      fragmentTransaction.commit();
+    }
 }
+
 
 

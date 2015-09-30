@@ -23,6 +23,11 @@
         android:enabled="true"
         android:title="@string/center_list"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/mitem_client_search"
+        android:enabled="true"
+        android:title="clientsearch"
+        app:showAsAction="ifRoom" />
 
     <!--
     <item

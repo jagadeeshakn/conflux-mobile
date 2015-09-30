@@ -201,6 +201,15 @@
     <string name="error_cannot_be_empty">cannot be empty</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
+    <string name="flash_on">flash_on</string>
+    <string name="flash_off">flash_off</string>
+    <string name="auto_focus_on">focus_on</string>
+    <string name="auto_focus_off">focus_off</string>
+    <string name="formats">formats</string>
+    <string name="select_camera">select_camera</string>
+    <string name="ok_button">ok_button</string>
+    <string name="cancel_button">cancel_button</string>
+    <string name="choose_formats">choose_formats</string>
 
     <string-array name="office_ids">
         <item>Head Office</item>
@@ -213,6 +222,7 @@
         <item>office 7</item>
     </string-array>
     <string name="title_activity_settings">Settings</string>
+
 
 
 </resources>
