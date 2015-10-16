@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,9 +35,9 @@ import com.mifos.objects.client.Client;
 import com.mifos.objects.organisation.Office;
 import com.mifos.services.data.ClientPayload;
 import com.mifos.utils.DateHelper;
-import com.mifos.utils.FragmentConstants;
 import com.mifos.utils.MifosApplication;
 import com.mifos.utils.SafeUIBlockingUtility;
+import com.squareup.okhttp.internal.Platform;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,14 +54,22 @@ import static com.mifos.utils.FragmentConstants.*;
 
 public class CreateNewClientFragment extends Fragment implements MFDatePicker.OnDatePickListener {
 
+    @InjectView(R.id.et_uid)
+    EditText et_uid;
+   // @InjectView(R.id.tv_uid)
+   // TextView tv_uid;
     @InjectView(R.id.et_client_first_name)
     EditText et_clientFirstName;
-    @InjectView(R.id.tv_client_first_name)
-    TextView tv_clientFirstName;
+    //@InjectView(R.id.tv_client_first_name)
+    //TextView tv_clientFirstName;
     @InjectView(R.id.et_client_last_name)
     EditText et_clientLastName;
-    @InjectView(R.id.tv_client_last_name)
-    TextView tv_clientLastName;
+    //@InjectView(R.id.tv_client_last_name)
+    //TextView tv_clientLastName;
+    @InjectView(R.id.et_fname)
+    EditText et_fname;
+   // @InjectView(R.id.tv_fname)
+    //TextView tv_fname;
     @InjectView(R.id.cb_client_active_status)
     CheckBox cb_clientActiveStatus;
     @InjectView(R.id.tv_submission_date)
@@ -73,8 +80,26 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
     Button bt_submit;
     @InjectView(R.id.bt_scan)
     Button bt_scan;
-
-
+    //@InjectView(R.id.et_gender)
+    //EditText et_gender;
+    //@InjectView(R.id.tv_gender)
+    //TextView tv_gender;
+    @InjectView(R.id.sp_gender)
+    Spinner sp_gender;
+    @InjectView(R.id.et_dob)
+    EditText et_dob;
+   // @InjectView(R.id.et_birth)
+    //EditText et_birth;
+    @InjectView(R.id.et_village)
+    EditText et_village;
+    @InjectView(R.id.et_po)
+    EditText et_po;
+    @InjectView(R.id.et_pin)
+    EditText et_pin;
+    @InjectView(R.id.et_dist)
+    EditText et_dist;
+    @InjectView(R.id.et_state)
+    EditText et_state;
     int officeId;
     Boolean result = true;
     View rootView;
@@ -82,6 +107,9 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
     SafeUIBlockingUtility safeUIBlockingUtility;
     private DialogFragment mfDatePicker;
     private HashMap<String, Integer> officeNameIdHashMap = new HashMap<String, Integer>();
+    private HashMap<String, Integer> genderNameIdHashMap = new HashMap<String, Integer>();
+    //String[] gender = { "Male", "Female" };
+    //String genderValue;
 
     public CreateNewClientFragment() {
         // Required empty public constructor
@@ -106,6 +134,7 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
         ButterKnife.inject(this, rootView);
         inflateOfficeSpinner();
         inflateSubmissionDate();
+        inflateBirthdate();
         //handle when scan Aadhar button is clicked
         bt_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,8 +172,19 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
 
             }
         });
+        sp_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-        return rootView;
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "item selected " + parent.getItemAtPosition(position), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(getActivity(), "please select gender", Toast.LENGTH_LONG).show();
+            }
+        });
+         return rootView;
     }
 
     //inflating office list spinner
@@ -238,10 +278,22 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
             }
         });
     }
+    public void inflateBirthdate(){
+        mfDatePicker = MFDatePicker.newInsance(this);
+        et_dob.setText(MFDatePicker.getDatePickedAsString());
+        et_dob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mfDatePicker.show(getActivity().getSupportFragmentManager(),DFRAG_DATE_PICKER);
+            }
+        });
+    }
+
 
     @Override
     public void onDatePicked(String date) {
         tv_submissionDate.setText(date);
+        et_dob.setText(date);
     }
 
     public boolean isValidFirstName() {
@@ -332,11 +384,42 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
         }
 
     }
+
     public void setViews(AadharDetail data) {
+        String gender;
         et_clientFirstName = (EditText) rootView.findViewById(R.id.et_client_first_name);
         et_clientFirstName.setText(data.getName());
-
+        et_uid = (EditText) rootView.findViewById(R.id.et_uid);
+        et_uid.setText(data.getUid());
+        et_fname = (EditText) rootView.findViewById(R.id.et_fname);
+        et_fname.setText(data.getGname());
+        gender=data.getGender();
+        if(gender.equals("M"))
+        {
+            sp_gender.setSelection(1);
+        }
+        else
+        {
+            sp_gender.setSelection(0);
+        }
+        //et_gender = (EditText) rootView.findViewById(R.id.et_gender);
+        //et_gender.setText(data.getGender());
+        et_dob = (EditText) rootView.findViewById(R.id.et_dob);
+        et_dob.setText(data.getDob());
+       /* et_birth = (EditText) rootView.findViewById(R.id.et_birth);
+        et_birth.setText(data.getYob());*/
+        et_village = (EditText) rootView.findViewById(R.id.et_village);
+        et_village.setText(data.getVtc());
+        et_po = (EditText) rootView.findViewById(R.id.et_po);
+        et_po.setText(data.getPo());
+        et_pin = (EditText) rootView.findViewById(R.id.et_pin);
+        et_pin.setText(data.getPc());
+        et_dist = (EditText) rootView.findViewById(R.id.et_dist);
+        et_dist.setText(data.getDist());
+        et_state = (EditText) rootView.findViewById(R.id.et_state);
+        et_state.setText(data.getState());
     }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

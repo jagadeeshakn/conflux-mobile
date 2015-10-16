@@ -91,17 +91,17 @@ public class DashboardFragmentActivity extends ActionBarActivity {
     public void openCreateClient(){
         CreateNewClientFragment createNewClientFragment = new CreateNewClientFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-       // fragmentTransaction.add(createNewClientFragment, FragmentConstants.FRAG_CREATE_NEW_CLIENT);;
-       fragmentTransaction.add(R.id.dashboard_global_container, createNewClientFragment, "clientNew");
         fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CREATE_NEW_CLIENT);
+       // fragmentTransaction.add(createNewClientFragment, FragmentConstants.FRAG_CREATE_NEW_CLIENT);;
+       fragmentTransaction.replace(R.id.dashboard_global_container, createNewClientFragment);
         // getSupportFragmentManager().findFragmentByTag("clientNew").setRetainInstance(true);
         fragmentTransaction.commit();
     }
   public void   openClinetSearch(){
       clientSearchFragment = new ClientSearchFragment();
       FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-     // fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CLIENT_SEARCH);
-      fragmentTransaction.add(R.id.dashboard_global_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
+      fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CREATE_NEW_CLIENT);
+      fragmentTransaction.replace(R.id.dashboard_global_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
       fragmentTransaction.commit();
     }
 }

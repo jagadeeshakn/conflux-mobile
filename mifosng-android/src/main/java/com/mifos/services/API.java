@@ -285,9 +285,6 @@ public class API {
         @POST(APIEndPoint.CLIENTS + "")
         public void uploadNewClientDetails();
 
-
-
-
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         @GET(APIEndPoint.CENTERS)
         public void getCenterList(@Query("dateFormat") String dateFormat, @Query("locale") String locale,

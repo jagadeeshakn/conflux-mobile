@@ -62,6 +62,31 @@ public class AadharDAO {
         if (attrName.equals("dob")) {
             ad.setDob(attrValue);
         }
+        if(attrName.equals("gname")){
+            ad.setGname(attrValue);
+        }
+        if(attrName.equals("gender")){
+            ad.setGender(attrValue);
+
+        }
+        if(attrName.equals("yob")){
+            ad.setYob(attrValue);
+        }
+        if (attrName.equals("vtc")){
+            ad.setVtc(attrValue);
+        }
+        if (attrName.equals("po")){
+            ad.setPo(attrValue);
+        }
+        if (attrName.equals("pc")){
+            ad.setPc(attrValue);
+        }
+        if(attrName.equals("dist")){
+            ad.setDist(attrValue);
+        }
+        if (attrName.equals("state")){
+            ad.setState(attrValue);
+        }
     }
 
 }
