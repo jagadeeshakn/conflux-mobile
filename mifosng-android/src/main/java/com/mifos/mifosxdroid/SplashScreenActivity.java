@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ public class SplashScreenActivity extends ActionBarActivity {
 
     SharedPreferences sharedPreferences;
     String authenticationToken;
+    static final String TAG="Login Messege";
 
     Context context;
 
@@ -61,13 +63,21 @@ public class SplashScreenActivity extends ActionBarActivity {
          */
         if (authenticationToken.equals("NA")) {
             //if authentication key is not present
-            startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+            Log.i(TAG,"User Credentials not present");
+            Intent intent=new Intent(SplashScreenActivity.this, LoginActivity.class);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(User.AUTHENTICATION_KEY, "NA");
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            editor.commit();
+            startActivity(intent);
         } else {
+            Log.i(TAG,"User Login was Successful using the saved User Credentials");
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             String instanceURL = sharedPreferences.getString(Constants.INSTANCE_URL_KEY, null);
             String tenantIdentifier = sharedPreferences.getString(Constants.TENANT_IDENTIFIER_KEY, null);
-
-            ((MifosApplication) getApplication()).api = new API(instanceURL, tenantIdentifier, false);
+            Boolean trust=sharedPreferences.getBoolean("Trust",false);
+                    ((MifosApplication) getApplication()).api = new API(instanceURL, tenantIdentifier, trust);
             //if authentication key is present open dashboard
             startActivity(new Intent(SplashScreenActivity.this, DashboardFragmentActivity.class));
         }

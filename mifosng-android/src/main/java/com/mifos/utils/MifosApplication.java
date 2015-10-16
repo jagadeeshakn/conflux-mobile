@@ -5,8 +5,13 @@
 
 package com.mifos.utils;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.mifos.services.API;
 import com.orm.SugarApp;
+
+import java.io.Serializable;
 
 /**
  * Created by ishankhanna on 13/03/15.

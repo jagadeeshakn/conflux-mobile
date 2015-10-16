@@ -114,11 +114,15 @@ public class API {
     public IdentifierService identifierService;
     public OfficeService officeService;
     public StaffService staffService;
+    private RestAdapter.Builder restAdapterBuilder;
+    private static TrustManager[] trustAllCerts;
+    private static SSLContext sslContext;
+    private static SSLSocketFactory sslSocketFactory;
 
 
     public API(final String url, final String tenantIdentifier, boolean shouldByPassSSLSecurity) {
 
-        RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder();
+        restAdapterBuilder = new RestAdapter.Builder();
         restAdapterBuilder.setEndpoint(url);
         if (shouldByPassSSLSecurity) {
             restAdapterBuilder.setClient(new OkClient(getUnsafeOkHttpClient()));
@@ -169,12 +173,17 @@ public class API {
         staffService = restAdapter.create(StaffService.class);
     }
 
+    public void getCertificate()
+    {
+        getUnsafeOkHttpClient();
+    }
+
 
 
     private  OkHttpClient getUnsafeOkHttpClient() {
         try {
             // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustAllCerts = new TrustManager[] {
+                    trustAllCerts = new TrustManager[] {
                     new X509TrustManager() {
                         @Override
                         public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
@@ -192,10 +201,10 @@ public class API {
             };
 
             // Install the all-trusting trust manager
-            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
             // Create an ssl socket factory with our all-trusting manager
-            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            sslSocketFactory = sslContext.getSocketFactory();
 
             OkHttpClient okHttpClient = new OkHttpClient();
             okHttpClient.setSslSocketFactory(sslSocketFactory);
@@ -218,12 +227,12 @@ public class API {
         Callback<T> cb = new Callback<T>() {
             @Override
             public void success(T o, Response response) {
-                System.out.println("Object " + o);
+               // System.out.println("Object " + o);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                System.out.println("Error: " + retrofitError);
+                //System.out.println("Error: " + retrofitError);
             }
         };
 
@@ -234,12 +243,13 @@ public class API {
         Callback<List<T>> cb = new Callback<List<T>>() {
             @Override
             public void success(List<T> o, Response response) {
-                System.out.println("Object " + o);
+
+                //System.out.println("Object " + o);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                System.out.println("Error: " + retrofitError);
+               // System.out.println("Error: " + retrofitError);
             }
         };
 
@@ -328,8 +338,12 @@ public class API {
 
         //TODO: Implement when API Fixed
         //@Headers({"Accept: application/octet-stream", CONTENT_TYPE_JSON})
-        @GET("/clients/{clientId}/images")
-        public void getClientImage(@Path("clientId") int clientId, Callback<TypedString> callback);
+      //  @GET("/clients/{clientId}/images")
+        //public void getClientImage(@Path("clientId") int clientId, Callback<TypedString> callback);
+
+        @Headers({"Accept: application/octet-stream"})
+        @GET(APIEndPoint.CLIENTS+"/{clientId}/images")
+        public void getClientImage(@Path("clientId") int clientId,@Query("maxHeight") int maxHeight,@Query("maxWidth") int maxWidth, Callback<Response> callback);
 
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         @POST(APIEndPoint.CLIENTS)
@@ -533,7 +547,7 @@ public class API {
 
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         @POST(APIEndPoint.AUTHENTICATION)
-        public void authenticate(@Query("username") String username, @Query("password") String password, Callback<User> userCallback);
+        public void authenticate(@Query("username") String username, @Query("password") String password, Callback<User> userFCallback);
 
     }
 
@@ -639,4 +653,5 @@ public class API {
         }
 
     }
+
 }

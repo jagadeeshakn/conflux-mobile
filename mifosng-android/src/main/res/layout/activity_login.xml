@@ -5,134 +5,43 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/activity_horizontal_margin">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:fillViewport="false">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="@string/mifos"
-        android:textSize="30sp"
+        android:textSize="40sp"
         android:id="@+id/tv_title"
         android:textColor="#ff003fff"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"/>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ll_URL"
-        android:orientation="horizontal"
-        android:layout_below="@id/tv_title"
-        android:weightSum="4">
+        android:layout_centerHorizontal="true" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/conflux_instance_domain"
-            android:id="@+id/tv_title_instance"
             android:layout_marginLeft="10dp"
-            android:layout_weight="3"
-            />
+            android:textSize="28sp"
+            android:textColor="#010001"
+            android:textAlignment="center"
+            android:gravity="center"
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/port"
-            android:id="@+id/tv_title_instance_port"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            />
+            android:text="@string/username"
+            android:id="@+id/tv_title_username"
+            android:layout_marginTop="6dp"
+            android:layout_below="@+id/tv_title"
+            android:layout_centerHorizontal="true" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_URL_INPUTS"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="4"
-        android:orientation="horizontal"
-        android:layout_below="@+id/ll_URL">
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_instanceURL"
-            android:inputType="text"
-            android:hint="@string/default_instance_url"
-            android:minWidth="200dp"
-            android:imeOptions="actionNext"
-            android:nextFocusDown="@+id/et_instancePort"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="3"
-             />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_instancePort"
-            android:inputType="text"
-            android:hint="@string/default_port"
-            android:minWidth="200dp"
-            android:imeOptions="actionNext"
-            android:nextFocusDown="@+id/et_tenantIdentifier"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            />
-    </LinearLayout>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_constructed_instance_url"
-        android:layout_below="@id/ll_URL_INPUTS"
-        android:layout_alignLeft="@id/ll_URL"
-        android:layout_marginTop="16dp"/>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ll_TENANT_IDENTIFIER"
-            android:orientation="horizontal"
-            android:layout_below="@id/tv_constructed_instance_url"
-            android:weightSum="4"
-            android:paddingTop="4dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/tenant_identifier"
-                android:id="@+id/tv_tenant_identifier"
-                android:layout_weight="2"
-                />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_tenantIdentifier"
-                android:inputType="text"
-                android:hint="@string/default_tenant"
-                android:minWidth="200dp"
-                android:imeOptions="actionNext"
-                android:nextFocusDown="@+id/et_username"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="2"
-                />
-
-        </LinearLayout>
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -142,12 +51,25 @@
         android:imeOptions="actionNext"
         android:nextFocusDown="@+id/et_password"
         android:layout_below="@+id/tv_title_username"
-        android:layout_alignLeft="@+id/tv_title_username"
-        android:layout_alignStart="@+id/tv_title_username"
-        android:layout_alignRight="@+id/ll_URL"
-        android:layout_alignEnd="@+id/ll_URL" />
+        android:layout_alignRight="@+id/tv_title"
+        android:layout_alignEnd="@+id/tv_title"
+        android:layout_alignLeft="@+id/tv_title"
+        android:layout_alignStart="@+id/tv_title"
+        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/abc_action_bar_title_text_size"
+            android:textColor="#010001"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="@string/password"
+            android:layout_marginTop="29dp"
+            android:id="@+id/tv_title_password"
+            android:layout_below="@+id/et_username"
+            android:layout_centerHorizontal="true" />
 
-    <EditText
+        <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
@@ -158,10 +80,10 @@
         android:imeActionLabel="@string/login"
         android:nextFocusDown="@+id/bt_login"
         android:layout_below="@+id/tv_title_password"
-        android:layout_alignLeft="@+id/tv_title_password"
-        android:layout_alignStart="@+id/tv_title_password"
-        android:layout_alignRight="@+id/et_username"
-        android:layout_alignEnd="@+id/et_username" />
+            android:layout_alignRight="@+id/et_username"
+        android:layout_alignEnd="@+id/et_username"
+            android:layout_alignLeft="@+id/et_username"
+            android:layout_alignStart="@+id/et_username" />
 
     <Button
         android:layout_width="wrap_content"
@@ -169,31 +91,15 @@
         android:text="@string/login"
         android:id="@+id/bt_login"
         android:layout_below="@+id/et_password"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:layout_alignRight="@+id/et_password"
+        android:layout_alignEnd="@+id/et_password"
+        android:layout_alignLeft="@+id/et_password"
+        android:layout_alignStart="@+id/et_password" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/username"
-        android:id="@+id/tv_title_username"
-        android:layout_marginTop="16dp"
-        android:layout_below="@+id/ll_TENANT_IDENTIFIER"
-        android:layout_alignLeft="@+id/ll_TENANT_IDENTIFIER"
-        android:layout_alignStart="@+id/ll_URL" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/password"
-        android:layout_marginTop="16dp"
-        android:id="@+id/tv_title_password"
-        android:layout_below="@+id/et_username"
-        android:layout_alignLeft="@+id/et_username"
-        android:layout_alignStart="@+id/et_username" />
+
 
 </RelativeLayout>
 </ScrollView>

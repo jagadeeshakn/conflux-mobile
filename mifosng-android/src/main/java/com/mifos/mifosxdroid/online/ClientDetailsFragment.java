@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,6 +55,7 @@ import com.mifos.objects.accounts.ClientAccounts;
 import com.mifos.objects.accounts.savings.DepositType;
 import com.mifos.objects.client.Client;
 import com.mifos.objects.noncore.DataTable;
+import com.mifos.services.API;
 import com.mifos.services.data.GpsCoordinatesRequest;
 import com.mifos.services.data.GpsCoordinatesResponse;
 import com.mifos.utils.Constants;
@@ -61,12 +63,21 @@ import com.mifos.utils.DateHelper;
 import com.mifos.utils.FragmentConstants;
 import com.mifos.utils.MifosApplication;
 import com.mifos.utils.SafeUIBlockingUtility;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
 
+import org.apache.commons.beanutils.Converter;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -128,6 +139,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
     ImageView iv_clientImage;
     @InjectView(R.id.pb_imageProgressBar)
     ProgressBar pb_imageProgressBar;
+    InputStream inputStream;
 
 
 
@@ -310,6 +322,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
         super.onPrepareOptionsMenu(menu);
     }
 
+
     /**
      * This hook is called whenever an item in your options menu is selected.
      * The default implementation simply returns false to have the normal
@@ -412,9 +425,31 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
                     @Override
                     public void success(Response response, Response response2) {
                         Toast.makeText(activity, activity.getString(R.string.client_image_updated), Toast.LENGTH_SHORT).show();
+                        System.out.println("image path "+imagePath);
                         Bitmap  bitMap = BitmapFactory.decodeFile(imagePath);
+                        System.out.println("bitmap " + bitMap.toString());
                         iv_clientImage.setImageBitmap(bitMap);
                         pb_imageProgressBar.setVisibility(View.GONE);
+
+                        File file=new File(imagePath);
+                        BufferedReader reader = null;
+                        StringBuilder text = new StringBuilder();
+                        try {
+                            reader = new BufferedReader(new FileReader(file));
+                            String str;
+                            if (imagePath!=null) {
+                                while ((str = reader.readLine()) != null) {
+                                    text.append(str + "\n" );
+                                }
+                            }
+                            System.out.println("image path file content " + text);
+                            reader.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                     @Override
@@ -468,8 +503,10 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
                     // receiving a 200 response with image bytes. Perhaps we need to change the
                     // argument type from TypedFile to something else?
                     if (client.isImagePresent()) {
+                        System.out.println("Image is present");
 
                         imageLoadingAsyncTask = new ImageLoadingAsyncTask();
+                        System.out.println("the image id is"+client.getImageId());
                         imageLoadingAsyncTask.execute(client.getId());
 
                     }
@@ -841,56 +878,36 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
         @Override
         protected Void doInBackground(Integer... integers) {
             Log.d(TAG, "In background now");
+            ((MifosApplication) getActivity().getApplication()).api.clientService.getClientImage(integers[0],150,120, new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    try {
+                        InputStream inputStream=response.getBody().in();
+                        byte[] b= IOUtils.toByteArray(inputStream);
+                        //getting the image in the application/octet-stream format and converting it to Bitmap to set it to image view
+                        bmp=BitmapFactory.decodeByteArray(b,0,b.length);
+                        if (bmp != null) {
+                            iv_clientImage.setImageBitmap(bmp);
+                        } else {
+                            System.out.println("bmp is null");
+                            iv_clientImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-            SharedPreferences pref = PreferenceManager
-                    .getDefaultSharedPreferences(Constants.applicationContext);
-            String authToken = pref.getString(User.AUTHENTICATION_KEY, "NA");
-            String mInstanceUrl = pref.getString(Constants.INSTANCE_URL_KEY,
-                    getString(R.string.default_instance_url));
+                @Override
+                public void failure(RetrofitError error) {
 
-            String url = Constants.PROTOCOL_HTTPS
-                    + mInstanceUrl
-                    + Constants.API_PATH + "/"
-                    + "clients/"
-                    + integers[0]
-                    + "/images?maxHeight=120&maxWidth=120";
-
-            try {
-
-                HttpURLConnection httpURLConnection = (HttpURLConnection) (new URL(url)).openConnection();
-
-                httpURLConnection.setRequestMethod("GET");
-                httpURLConnection.setRequestProperty("X-Mifos-Platform-TenantId", "default");
-                httpURLConnection.setRequestProperty(((MifosApplication)getActivity().getApplication()).api.HEADER_AUTHORIZATION, authToken);
-                httpURLConnection.setRequestProperty("Accept", "application/octet-stream");
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.connect();
-                Log.i("Connected", "True");
-                InputStream inputStream = httpURLConnection.getInputStream();
-
-                bmp = BitmapFactory.decodeStream(inputStream);
-
-                httpURLConnection.disconnect();
-                Log.i("Connected", "False");
-
-            } catch (MalformedURLException e) {
-
-            } catch (IOException ioe) {
-
-            }
-
+                }
+            });
 
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
-            if (bmp != null) {
-                iv_clientImage.setImageBitmap(bmp);
-            } else {
-                iv_clientImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
-            }
             Log.d(TAG, "In PostExecute now");
 
             pb_imageProgressBar.setVisibility(View.GONE);
@@ -1035,5 +1052,11 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
             }
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MifosApplication) getActivity().getApplication()).api.getCertificate();
     }
 }

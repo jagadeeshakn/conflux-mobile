@@ -16,6 +16,7 @@ public class Constants {
 
     public static final String INSTANCE_URL_KEY = "instanceURL";
 
+
     public static final String INSTANCE_DOMAIN_KEY = "instanceDomain";
 
     public static final String INSTANCE_PORT_KEY = "instancePort";

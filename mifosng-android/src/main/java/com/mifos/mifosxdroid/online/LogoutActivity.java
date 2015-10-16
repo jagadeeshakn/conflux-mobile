@@ -37,5 +37,6 @@ public class LogoutActivity extends ActionBarActivity {
         editor.commit();
         editor.apply();
         startActivity(new Intent(LogoutActivity.this, SplashScreenActivity.class));
+        finish();
     }
 }

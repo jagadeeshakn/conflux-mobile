@@ -5,8 +5,10 @@
 
 package com.mifos.mifosxdroid.online;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,10 +16,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.mifos.mifosxdroid.OfflineCenterInputActivity;
 import com.mifos.mifosxdroid.R;
+import com.mifos.utils.Constants;
 import com.mifos.utils.FragmentConstants;
+import com.mifos.utils.MifosApplication;
+
+import javax.annotation.Resource;
 
 import javax.net.ssl.SSLContext;
 
@@ -32,11 +41,30 @@ public class DashboardFragmentActivity extends ActionBarActivity {
     public static Context context;
     ClientSearchFragment clientSearchFragment;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        ClientSearchFragment clientSearchFragment = new ClientSearchFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.dashboard_global_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
+        fragmentTransaction.commit();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        /*Button btn=(Button)findViewById();
+        btn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                Toast.makeText(getApplication(),"hello",Toast.LENGTH_SHORT).show();
+
+            }
+        });*/
+        
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,13 +92,15 @@ public class DashboardFragmentActivity extends ActionBarActivity {
                 break;
             case R.id.logout:
                 startActivity(new Intent(DashboardFragmentActivity.this, LogoutActivity.class));
+                finish();
                 break;
             case R.id.mItem_create_new_client:
                 openCreateClient();
                 break;
-            case R.id.mitem_client_search:
-                openClinetSearch();
-
+            case android.R.id.home:
+                    startActivity(new Intent(this, DashboardFragmentActivity.class));
+                    finish();
+                break;
             default: //DO NOTHING
                 break;
         }
@@ -92,17 +122,8 @@ public class DashboardFragmentActivity extends ActionBarActivity {
         CreateNewClientFragment createNewClientFragment = new CreateNewClientFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CREATE_NEW_CLIENT);
-       // fragmentTransaction.add(createNewClientFragment, FragmentConstants.FRAG_CREATE_NEW_CLIENT);;
-       fragmentTransaction.replace(R.id.dashboard_global_container, createNewClientFragment);
-        // getSupportFragmentManager().findFragmentByTag("clientNew").setRetainInstance(true);
+        fragmentTransaction.replace(R.id.dashboard_global_container, createNewClientFragment);
         fragmentTransaction.commit();
-    }
-  public void   openClinetSearch(){
-      clientSearchFragment = new ClientSearchFragment();
-      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-      fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CREATE_NEW_CLIENT);
-      fragmentTransaction.replace(R.id.dashboard_global_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
-      fragmentTransaction.commit();
     }
 }
 

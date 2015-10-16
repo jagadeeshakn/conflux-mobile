@@ -1,34 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:fillViewport="false"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
-         <TextView
-            android:layout_width="@dimen/abc_dropdownitem_icon_width"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/conflux_instance_domain"
-            android:id="@+id/tv_title_instance"
-             android:textColor="#ff003fff"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:height="@dimen/abc_action_bar_stacked_max_height"
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="center">
+    <TextView
+        android:layout_width="@dimen/abc_dropdownitem_icon_width"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/conflux_instance_domain"
+        android:id="@+id/tv_title_instance"
 
-            android:textStyle="bold"
-            android:width="@dimen/abc_action_bar_title_text_size"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:textSize="@dimen/abc_action_bar_title_text_size" />
+        android:layout_marginLeft="10dp"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:height="@dimen/abc_action_bar_stacked_max_height"
+        android:textColor="#ff003fff"
+        android:textStyle="bold"
+        android:width="@dimen/abc_action_bar_title_text_size"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/abc_action_bar_title_text_size" />
     <EditText
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/et_instanceURL"
         android:hint="@string/default_instance_url"
@@ -105,31 +99,31 @@
         android:gravity="center"/>
 
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="8.13"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:id="@+id/btnSave"
-                android:layout_below="@+id/et_tenantIdentifier"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="left"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:onClick="onSave" />
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="8.13"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            android:layout_below="@+id/btnSave"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="goBack"/>
+    <Button
+        android:layout_width="0dp"
+        android:layout_weight="8.13"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:id="@+id/btnSave"
+        android:layout_below="@+id/et_tenantIdentifier"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="left"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onSave" />
+    <Button
+        android:layout_width="0dp"
+        android:layout_weight="8.13"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:layout_below="@+id/btnSave"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="goBack"/>
 
 
 
-    </RelativeLayout>
-</ScrollView>
+</RelativeLayout>
+
 
