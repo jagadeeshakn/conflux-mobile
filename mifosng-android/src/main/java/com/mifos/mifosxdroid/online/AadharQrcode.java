@@ -175,6 +175,7 @@ public class AadharQrcode extends ActionBarActivity implements MessageDialogFrag
             setResult(Activity.RESULT_OK, resultIntent);
             finish();
 
+
         } catch (Exception e) {
         }
     }

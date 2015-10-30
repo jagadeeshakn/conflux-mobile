@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +22,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.mifos.exceptions.InvalidTextInputException;
 import com.mifos.exceptions.RequiredFieldException;
 import com.mifos.exceptions.ShortOfLengthException;
@@ -34,11 +33,13 @@ import com.mifos.mifosxdroid.R;
 import com.mifos.mifosxdroid.uihelpers.MFDatePicker;
 import com.mifos.objects.client.Client;
 import com.mifos.objects.organisation.Office;
+import com.mifos.services.ActivityResultBus;
+import com.mifos.services.ActivityResultEvent;
 import com.mifos.services.data.ClientPayload;
 import com.mifos.utils.DateHelper;
-import com.mifos.utils.FragmentConstants;
 import com.mifos.utils.MifosApplication;
 import com.mifos.utils.SafeUIBlockingUtility;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,14 +56,22 @@ import static com.mifos.utils.FragmentConstants.*;
 
 public class CreateNewClientFragment extends Fragment implements MFDatePicker.OnDatePickListener {
 
+    private CreateNewClientFragment createNewClientFragment;
+
+    @InjectView(R.id.et_uid)
+    EditText et_uid;
     @InjectView(R.id.et_client_first_name)
     EditText et_clientFirstName;
-    @InjectView(R.id.tv_client_first_name)
-    TextView tv_clientFirstName;
+    //@InjectView(R.id.tv_client_first_name)
+    //TextView tv_clientFirstName;
     @InjectView(R.id.et_client_last_name)
     EditText et_clientLastName;
-    @InjectView(R.id.tv_client_last_name)
-    TextView tv_clientLastName;
+    //@InjectView(R.id.tv_client_last_name)
+    //TextView tv_clientLastName;
+    @InjectView(R.id.et_fname)
+    EditText et_fname;
+   // @InjectView(R.id.tv_fname)
+    //TextView tv_fname;
     @InjectView(R.id.cb_client_active_status)
     CheckBox cb_clientActiveStatus;
     @InjectView(R.id.tv_submission_date)
@@ -72,9 +81,21 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
     @InjectView(R.id.bt_submit)
     Button bt_submit;
     @InjectView(R.id.bt_scan)
-    Button bt_scan;
-
-
+    ImageButton bt_scan;
+    @InjectView(R.id.sp_gender)
+    Spinner sp_gender;
+    @InjectView(R.id.et_dob)
+    EditText et_dob;
+    @InjectView(R.id.et_village)
+    EditText et_village;
+    @InjectView(R.id.et_po)
+    EditText et_po;
+    @InjectView(R.id.et_pin)
+    EditText et_pin;
+    @InjectView(R.id.et_dist)
+    EditText et_dist;
+    @InjectView(R.id.et_state)
+    EditText et_state;
     int officeId;
     Boolean result = true;
     View rootView;
@@ -92,20 +113,36 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
         return createNewClientFragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        inflateOfficeSpinner();
+         }
 
+    /*@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("officeId",officeNameIdHashMap);
     }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        officeNameIdHashMap=(HashMap<String,Integer>)savedInstanceState.getSerializable("officeId");
+    }
+*/
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_create_new_client, container, false);
+         rootView = inflater.inflate(R.layout.fragment_create_new_client, container, false);
         ButterKnife.inject(this, rootView);
-        inflateOfficeSpinner();
         inflateSubmissionDate();
+        inflateBirthdate();
         //handle when scan Aadhar button is clicked
         bt_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +162,7 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
         });
 
         dateString = tv_submissionDate.getText().toString();
-        dateString = DateHelper.getDateAsStringUsedForCollectionSheetPayload(dateString).replace("-", " ");
+       dateString = DateHelper.getDateAsStringUsedForCollectionSheetPayload(dateString).replace("-", " ");
 
         bt_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,9 +180,30 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
 
             }
         });
+        sp_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-        return rootView;
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "item selected " + parent.getItemAtPosition(position), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Toast.makeText(getActivity(), "please select gender", Toast.LENGTH_LONG).show();
+            }
+        });
+         return rootView;
+
     }
+
+    public CreateNewClientFragment getCreateNewClientFragment() {
+        return createNewClientFragment;
+    }
+
+    public void setCreateNewClientFragment(CreateNewClientFragment createNewClientFragment) {
+        this.createNewClientFragment = createNewClientFragment;
+    }
+
 
     //inflating office list spinner
     private void inflateOfficeSpinner() {
@@ -238,10 +296,22 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
             }
         });
     }
+    public void inflateBirthdate(){
+        mfDatePicker = MFDatePicker.newInsance(this);
+        et_dob.setText(MFDatePicker.getDatePickedAsString());
+        et_dob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mfDatePicker.show(getActivity().getSupportFragmentManager(), DFRAG_DATE_PICKER);
+            }
+        });
+    }
+
 
     @Override
     public void onDatePicked(String date) {
         tv_submissionDate.setText(date);
+        et_dob.setText(date);
     }
 
     public boolean isValidFirstName() {
@@ -318,25 +388,75 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
         Intent intent = new Intent(getActivity(), AadharQrcode.class);
         startActivityForResult(intent, 111);
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        ActivityResultBus.getInstance().register(mActivityResultSubscriber);
+    }
 
     @Override
-    public void onActivityResult(int requestcode, int resultcode, Intent data) {
-        super.onActivityResult(requestcode, resultcode, data);
-        if (requestcode == 111) {
-            if (resultcode == Activity.RESULT_OK) {
+    public void onStop() {
+        super.onStop();
+        ActivityResultBus.getInstance().unregister(mActivityResultSubscriber);
+    }
+
+    private Object mActivityResultSubscriber = new Object() {
+        @Subscribe
+        public void onActivityResultReceived(ActivityResultEvent event) {
+            int requestCode = event.getRequestCode();
+            int resultCode = event.getResultCode();
+            Intent data = event.getData();
+            onActivityResult(requestCode, resultCode, data);
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ActivityResultBus.getInstance().postQueue(
+                new ActivityResultEvent(requestCode, resultCode, data));
+        if (requestCode == 111) {
+            if (resultCode == Activity.RESULT_OK) {
                 Bundle resultData = data.getExtras();
                 Bundle bundleOfobject = resultData.getBundle("details");
                 AadharDetail ad = (AadharDetail) bundleOfobject.getSerializable("data");
                 setViews(ad);
             }
         }
-
     }
+
     public void setViews(AadharDetail data) {
+        String gender;
         et_clientFirstName = (EditText) rootView.findViewById(R.id.et_client_first_name);
         et_clientFirstName.setText(data.getName());
-
+        et_uid = (EditText) rootView.findViewById(R.id.et_uid);
+        et_uid.setText(data.getUid());
+        et_fname = (EditText) rootView.findViewById(R.id.et_fname);
+        et_fname.setText(data.getGname());
+        gender=data.getGender();
+        if(gender.equals("M"))
+        {
+            sp_gender.setSelection(1);
+        }
+        else
+        {
+            sp_gender.setSelection(0);
+        }
+        et_dob = (EditText) rootView.findViewById(R.id.et_dob);
+        et_dob.setText(data.getDob());
+        et_village = (EditText) rootView.findViewById(R.id.et_village);
+        et_village.setText(data.getVtc());
+        et_po = (EditText) rootView.findViewById(R.id.et_po);
+        et_po.setText(data.getPo());
+        et_pin = (EditText) rootView.findViewById(R.id.et_pin);
+        et_pin.setText(data.getPc());
+        et_dist = (EditText) rootView.findViewById(R.id.et_dist);
+        et_dist.setText(data.getDist());
+        et_state = (EditText) rootView.findViewById(R.id.et_state);
+        et_state.setText(data.getState());
     }
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -346,5 +466,6 @@ public class CreateNewClientFragment extends Fragment implements MFDatePicker.On
     public void onDetach() {
         super.onDetach();
     }
+
 
 }

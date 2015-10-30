@@ -8,19 +8,14 @@ package com.mifos.mifosxdroid.online;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.mifos.mifosxdroid.OfflineCenterInputActivity;
 import com.mifos.mifosxdroid.R;
 import com.mifos.utils.FragmentConstants;
-
-import javax.net.ssl.SSLContext;
-
 /**
  * Created by ishankhanna on 09/02/14.
  */
@@ -30,13 +25,20 @@ public class DashboardFragmentActivity extends ActionBarActivity {
 
     public final static String TAG = DashboardFragmentActivity.class.getSimpleName();
     public static Context context;
-    ClientSearchFragment clientSearchFragment;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        ClientSearchFragment clientSearchFragment = new ClientSearchFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.dashboard_global_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
+        fragmentTransaction.commit();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,30 +55,33 @@ public class DashboardFragmentActivity extends ActionBarActivity {
             case R.id.item_centers:
                 startActivity(new Intent(this, CentersActivity.class));
                 break;
-            case R.id.mItem_list :
+            case R.id.mItem_list:
                 loadClientList();
                 break;
             //case R.id.item_collection_sheet :
-                //startActivity(new Intent(DashboardFragmentActivity.this, GenerateCollectionSheet.class));
+            //startActivity(new Intent(DashboardFragmentActivity.this, GenerateCollectionSheet.class));
             //    break;
             case R.id.item_offline_centers:
                 startActivity(new Intent(this, OfflineCenterInputActivity.class));
                 break;
             case R.id.logout:
                 startActivity(new Intent(DashboardFragmentActivity.this, LogoutActivity.class));
+                finish();
                 break;
             case R.id.mItem_create_new_client:
                 openCreateClient();
                 break;
-            case R.id.mitem_client_search:
-                openClinetSearch();
-
+            case android.R.id.home:
+                startActivity(new Intent(this, DashboardFragmentActivity.class));
+                finish();
+                break;
             default: //DO NOTHING
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     public void loadClientList() {
 
@@ -88,21 +93,18 @@ public class DashboardFragmentActivity extends ActionBarActivity {
 
     }
 
-    public void openCreateClient(){
-        CreateNewClientFragment createNewClientFragment = new CreateNewClientFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-       // fragmentTransaction.add(createNewClientFragment, FragmentConstants.FRAG_CREATE_NEW_CLIENT);;
-       fragmentTransaction.add(R.id.dashboard_global_container, createNewClientFragment, "clientNew");
-        fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CREATE_NEW_CLIENT);
-        // getSupportFragmentManager().findFragmentByTag("clientNew").setRetainInstance(true);
-        fragmentTransaction.commit();
+    public void openCreateClient() {
+        Intent intent = new Intent(this, CreateNewClientActivity.class);
+        startActivity(intent);
     }
-  public void   openClinetSearch(){
-      clientSearchFragment = new ClientSearchFragment();
-      FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-     // fragmentTransaction.addToBackStack(FragmentConstants.FRAG_CLIENT_SEARCH);
-      fragmentTransaction.add(R.id.dashboard_global_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
-      fragmentTransaction.commit();
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.dashboard_global_container, getSupportFragmentManager().findFragmentByTag("newClient"));
+        fragmentTransaction.commit();
+
     }
 }
 
