@@ -124,6 +124,11 @@
             android:name=".Settings"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".online.CreateNewClientActivity"
+            android:label="@string/title_activity_create_client" >
+        </activity>
+
     </application>
 
 </manifest>

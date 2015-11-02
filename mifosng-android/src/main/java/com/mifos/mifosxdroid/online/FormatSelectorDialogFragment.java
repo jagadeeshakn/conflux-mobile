@@ -73,7 +73,7 @@ public class FormatSelectorDialogFragment extends DialogFragment {
                             }
                         })
                         // Set the action buttons
-                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK, so save the mSelectedIndices results somewhere
@@ -83,7 +83,7 @@ public class FormatSelectorDialogFragment extends DialogFragment {
                         }
                     }
                 })
-                .setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                     }
