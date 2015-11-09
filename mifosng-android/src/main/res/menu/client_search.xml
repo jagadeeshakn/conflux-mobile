@@ -7,32 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/mItem_list"
-        android:enabled="true"
-        android:title="@string/list_all_clients"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/mItem_create_new_client"
-        android:enabled="true"
-        android:title="@string/create_client"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/item_centers"
-        android:enabled="true"
-        android:title="@string/center_list"
-        app:showAsAction="never" />
-
-    <!--
-    <item
-        android:id="@+id/item_collection_sheet"
-        android:enabled="true"
-        android:title="@string/collection_sheet"
-        app:showAsAction="never" />
-    -->
-
-    <item
             android:id="@+id/item_offline_centers"
             android:enabled="true"
             android:title="@string/offline"

@@ -29,11 +29,12 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Mifosxactionbar" >
+        android:logo="@mipmap/ic_launcher"
+        android:theme="@style/Theme.Mifosxactionbar">
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,7 +44,8 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/login"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:logo="@mipmap/ic_launcher"/>
         <activity
             android:name=".online.LogoutActivity"
             android:label="@string/logout"
@@ -51,7 +53,7 @@
         <activity
             android:name=".online.DashboardFragmentActivity"
             android:label="@string/dashboard"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".online.AadharQrcode"
             android:screenOrientation="portrait"/>
@@ -99,7 +101,8 @@
         <activity
             android:name=".online.CentersActivity"
             android:label="@string/title_activity_centers"
-            android:parentActivityName=".online.DashboardFragmentActivity" >
+            android:parentActivityName=".online.DashboardFragmentActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mifos.mifosxdroid.online.DashboardFragmentActivity" />

@@ -1,0 +1,138 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.conflux37.detailfragmentdemo.GetFragment"
+    android:fillViewport="true">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+
+
+    <!-- <android.support.v7.widget.RecyclerView
+         android:id="@+id/list"
+         android:layout_width="match_parent"
+         android:layout_height="fill_parent"
+         android:background="#00fff3fc"
+         android:divider="@null"
+         android:listSelector="@android:color/transparent"/>-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:weightSum="1">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="0.5"
+                    android:layout_margin="10dp"
+                    android:id="@+id/linear_layout_create_client"
+                    android:elevation="20dp"
+                    android:weightSum="1">
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="175dp"
+                        android:id="@+id/btn_create_new_client"
+                        android:background="#00111111"
+                        android:elevation="5dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Create New Client"
+                        android:textSize="17sp"
+                        android:gravity="center"
+                        android:id="@+id/text_create_new_client"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="0.5"
+                    android:layout_margin="10dp"
+                    android:id="@+id/linear_layout_create_center"
+                    android:elevation="20dp">
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="175dp"
+                        android:id="@+id/btn_create_new_center"
+                        android:background="#00111111"
+                        android:elevation="5dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/create_new_center"
+                        android:gravity="center"
+                        android:textSize="17sp"
+                        android:id="@+id/text_create_new_center"
+                        />
+
+                </LinearLayout>
+
+            </TableRow>
+            <TableRow
+                android:weightSum="1">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="0.5"
+                    android:layout_margin="10dp"
+                    android:id="@+id/linear_layout_collection_sheet"
+                    android:elevation="20dp"
+                    android:weightSum="1">
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="175dp"
+                        android:id="@+id/btn_collection_sheet"
+                        android:background="#00111111"
+                        android:elevation="5dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Collection Sheet"
+                        android:textSize="17sp"
+                        android:gravity="center"
+                        android:id="@+id/text_collection_sheet"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="0.5"
+                    android:layout_margin="10dp"
+                    android:id="@+id/linear_layout_center_list"
+                    android:elevation="20dp"
+                    android:weightSum="1">
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="175dp"
+                        android:id="@+id/btn_center_list"
+                        android:background="#00111111"
+                        android:elevation="5dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Center List"
+                        android:textSize="17sp"
+                        android:gravity="center"
+                        android:id="@+id/text_center_list"
+                        />
+
+                </LinearLayout>
+
+
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>

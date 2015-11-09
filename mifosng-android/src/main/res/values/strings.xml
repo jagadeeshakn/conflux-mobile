@@ -185,7 +185,7 @@
     <string name="port">Port</string>
     <string name="default_tenant" translatable="false">default</string>
     <string name="tenant_identifier">Tenant Identifier</string>
-    <string name="dashboard">Dashboard</string>
+    <string name="dashboard">Conflux-CBS</string>
     <string name="menu_take_photo">Take new photo</string>
     <string name="menu_remove_photo">Remove photo</string>
     <string name="toast_welcome">Welcome</string>
@@ -201,6 +201,7 @@
     <string name="error_cannot_be_empty">cannot be empty</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
+    <string name="the_input">The Input</string>
     <string name="flash_on">flash_on</string>
     <string name="flash_off">flash_off</string>
     <string name="auto_focus_on">focus_on</string>
@@ -222,6 +223,9 @@
     </string-array>
     <string name="title_activity_settings">Settings</string>
     <string name="Gender_prompt">Choose Gender</string>
+    <string name="create_new_center">Create New Center</string>
+    <string name="home">Home</string>
+    <string name="create_new_client">Create New Client</string>
     <string-array name="gend">
 
     </string-array>
@@ -229,7 +233,8 @@
         <item>Female</item>
         <item>Male</item>
     </string-array>
-    <string name="title_activity_create_client">CreateNewClientActivity</string>
+    <string name="title_activity_create_client"></string>
+>>>>>>> exception handling has been fixed and new center creation feature has been added
 
 
 </resources>

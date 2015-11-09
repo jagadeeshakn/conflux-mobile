@@ -28,6 +28,10 @@ public class CentersActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_centers);
         ButterKnife.inject(this);
+       //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher);
+        getSupportActionBar().setTitle(R.string.dashboard);
+        getSupportActionBar().setSubtitle(R.string.title_activity_centers);
 
         FragmentTransaction fragmentTransaction =  getSupportFragmentManager().beginTransaction();
         CenterListFragment centerListFragment = new CenterListFragment();

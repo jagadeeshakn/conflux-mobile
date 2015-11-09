@@ -24,6 +24,7 @@ import com.mifos.objects.accounts.savings.SavingsAccountTransactionResponse;
 import com.mifos.objects.accounts.savings.SavingsAccountWithAssociations;
 import com.mifos.objects.client.Client;
 import com.mifos.objects.client.Page;
+import com.mifos.objects.db.CenterCreationResponse;
 import com.mifos.objects.db.CollectionSheet;
 import com.mifos.objects.db.OfflineCenter;
 import com.mifos.objects.group.Center;
@@ -38,6 +39,7 @@ import com.mifos.objects.organisation.Staff;
 import com.mifos.objects.templates.loans.LoanRepaymentTemplate;
 import com.mifos.objects.templates.savings.SavingsAccountTransactionTemplate;
 import com.mifos.services.data.APIEndPoint;
+import com.mifos.services.data.CenterPayload;
 import com.mifos.services.data.ClientPayload;
 import com.mifos.services.data.CollectionSheetPayload;
 import com.mifos.services.data.GpsCoordinatesRequest;
@@ -45,11 +47,16 @@ import com.mifos.services.data.GpsCoordinatesResponse;
 import com.mifos.services.data.Payload;
 import com.mifos.services.data.SaveResponse;
 import com.mifos.utils.Constants;
+import com.mifos.utils.MFError;
 import com.mifos.utils.MFErrorResponse;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.apache.http.HttpStatus;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.cert.CertificateException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -118,6 +125,7 @@ public class API {
     private static TrustManager[] trustAllCerts;
     private static SSLContext sslContext;
     private static SSLSocketFactory sslSocketFactory;
+    public static String userErrorMessage;
 
 
     public API(final String url, final String tenantIdentifier, boolean shouldByPassSSLSecurity) {
@@ -303,6 +311,11 @@ public class API {
         public void getCenterList(@Query("dateFormat") String dateFormat, @Query("locale") String locale,
                                   @Query("meetingDate") String meetingDate, @Query("officeId") int officeId,
                                   @Query("staffId") int staffId, Callback<List<OfflineCenter>> callback);
+
+        @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
+        @POST(APIEndPoint.CENTERS)
+        public void createCenter(@Body CenterPayload centerPayload,Callback<CenterCreationResponse>  centerCreationResponseCallback);
+
 
     }
 
@@ -610,10 +623,13 @@ public class API {
     }
 
     static class MifosRestErrorHandler implements ErrorHandler {
+        String errorStringJSON = null;
+        List<MFError> errorResponses;
         @Override
         public Throwable handleError(RetrofitError retrofitError) {
 
             Response response = retrofitError.getResponse();
+            String errorStringJSON = null;
             if (response != null) {
 
                 if (response.getStatus() == HttpStatus.SC_UNAUTHORIZED) {
@@ -621,8 +637,16 @@ public class API {
 
 
                 } else if (response.getStatus() == HttpStatus.SC_BAD_REQUEST) {
-
-                    MFErrorResponse mfErrorResponse = new Gson().fromJson(response.getBody().toString(), MFErrorResponse.class);
+                    try {
+                        errorStringJSON=getStringFromInputStream(response.getBody().in());
+                    } catch (IOException e) {
+                        Log.e("ERROR", "BAD Request -Invalid Parameter of Data Integrity Issue");
+                    }
+                    MFErrorResponse mfErrorResponse = new Gson().fromJson(errorStringJSON, MFErrorResponse.class);
+                    errorResponses=mfErrorResponse.getErrors();
+                    MFError error=errorResponses.get(0);
+                    userErrorMessage=error.getDefaultUserMessage();
+                    /*userErrorMessage=mfErrorResponse.getDefaultUserMessage();*/
                     Log.d("Status", "Bad Request - Invalid Parameter or Data Integrity Issue.");
                     Log.d("URL", response.getUrl());
                     List<retrofit.client.Header> headersList = response.getHeaders();
@@ -633,12 +657,24 @@ public class API {
                     }
                 } else if (response.getStatus() == HttpStatus.SC_FORBIDDEN) {
 
-                    MFErrorResponse mfErrorResponse = new Gson().fromJson(response.getBody().toString(), MFErrorResponse.class);
+                    try {
+                        System.out.println("the error message "+getStringFromInputStream(response.getBody().in()));
+                        errorStringJSON=getStringFromInputStream(response.getBody().in());
+                    } catch (IOException e) {
+                        Log.e("ERROR", "BAD Request -Invalid Parameter of Data Integrity Issue");
+                    }
+                    MFErrorResponse mfErrorResponse = null;
+                    /*try {*/
+                    mfErrorResponse = new Gson().fromJson(errorStringJSON, MFErrorResponse.class);
 
-                    Toast.makeText(Constants.applicationContext, mfErrorResponse.getDefaultUserMessage(), Toast.LENGTH_LONG).show();
-
+                    System.out.println("the default user message is " + mfErrorResponse.getDefaultUserMessage());
+                  /*Toast.makeText(Constants.applicationContext.getApplicationContext(), mfErrorResponse.getDefaultUserMessage(), Toast.LENGTH_LONG).show();*/
+                    userErrorMessage=mfErrorResponse.getDefaultUserMessage();
                     Log.d("Status", "Bad Request - Invalid Parameter or Data Integrity Issue.");
                     Log.d("URL", response.getUrl());
+                   /* } catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
                     List<retrofit.client.Header> headersList = response.getHeaders();
                     Iterator<retrofit.client.Header> iterator = headersList.iterator();
                     while (iterator.hasNext()) {
@@ -649,11 +685,44 @@ public class API {
                 }
 
             }
+            else
+            {
+                userErrorMessage="No Connection...";
+            }
 
 
 
             return retrofitError;
         }
+
+    }
+
+    private static String getStringFromInputStream(InputStream is) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+
+            br = new BufferedReader(new InputStreamReader(is));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return sb.toString();
 
     }
 

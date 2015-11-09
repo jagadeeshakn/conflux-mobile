@@ -10,7 +10,7 @@
 
   <style name="mifosxtheme" parent="@style/_mifosxtheme"/>
 
-  <style name="_mifosxtheme" parent="Theme.AppCompat.Light">
+  <style name="_mifosxtheme" parent="AppTheme.Base">
 
     <item name="android:editTextStyle">@style/EditTextmifosxtheme</item>
 

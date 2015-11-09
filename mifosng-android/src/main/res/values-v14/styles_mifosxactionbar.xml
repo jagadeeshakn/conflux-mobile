@@ -6,7 +6,7 @@
 
 <resources>
 
-    <style name="Theme.Mifosxactionbar" parent="@style/Theme.AppCompat.Light">
+    <style name="Theme.Mifosxactionbar" parent="AppTheme.Base">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_mifosxactionbar</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Mifosxactionbar</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Mifosxactionbar</item>

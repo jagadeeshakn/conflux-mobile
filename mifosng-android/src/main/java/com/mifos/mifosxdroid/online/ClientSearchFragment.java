@@ -9,6 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,20 +44,32 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
 
     private static final String TAG = "Client Search Fragment";
 
-    @InjectView(R.id.et_search_by_id)
+   /* @InjectView(R.id.et_search_by_id)
     EditText et_searchById;
     @InjectView(R.id.bt_searchClient)
-    Button bt_searchClient;
+    Button bt_searchClient;*/
     @InjectView(R.id.lv_searchResults)
     ListView lv_searchResults;
+    private String searchQuery;
+
+    InputMethodManager inputMethodManager;
 
     View rootView;
     List<String> clientNames = new ArrayList<String>();
     List<Integer> clientIds = new ArrayList<Integer>();
     SafeUIBlockingUtility safeUIBlockingUtility;
-    private String searchQuery;
 
-    InputMethodManager inputMethodManager;
+    public String getSearchQuery() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+    }
+
+
+
+
 
     public ClientSearchFragment() {
         // Required empty public constructor
@@ -77,13 +92,21 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_client_search, null);
         ButterKnife.inject(this, rootView);
-
-
-
+        search();
         return rootView;
     }
 
-    @OnClick(R.id.bt_searchClient)
+public void search()
+{
+    if (!searchQuery.isEmpty()) {
+       /* searchQuery = et_searchById.getEditableText().toString().trim();*/
+        findClients(searchQuery);
+
+    } else {
+        Toast.makeText(getActivity(), "No Search Query Entered!", Toast.LENGTH_SHORT).show();
+    }
+}
+    /*@OnClick(R.id.bt_searchClient)
     public void performSearch() {
 
         if (!et_searchById.getEditableText().toString().trim().isEmpty()) {
@@ -95,7 +118,7 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
         }
 
 
-    }
+    }*/
 
 
     public void findClients(final String clientName) {
@@ -124,7 +147,7 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
                 lv_searchResults.setOnItemClickListener(ClientSearchFragment.this);
 
                 //If the search query returned one or more results close the keyboard
-                hideKeyboard();
+               /* hideKeyboard();*/
 
 
                 safeUIBlockingUtility.safelyUnBlockUI();
@@ -150,8 +173,8 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
     public void onPause() {
 
         //Fragment getting detached, keyboard if open must be hidden
-        hideKeyboard();
-
+       /* hideKeyboard();*/
+        Toast.makeText(getActivity(),"search fragment resume",Toast.LENGTH_LONG).show();
         super.onPause();
     }
 
@@ -164,22 +187,18 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        try{
-            String queryString = et_searchById.getEditableText().toString();
-
-            if(queryString != null && !(queryString.equals(""))) {
-                outState.putString(TAG+et_searchById.getId(),queryString);
-            }
-
-        }catch(NullPointerException npe){
-            //Looks like edit text didn't get initialized properly
+       try{ if(searchQuery != null && !(searchQuery.equals(""))) {
+            outState.putString(TAG+searchQuery,searchQuery);
         }
+
+    }catch(NullPointerException npe){
+        //Looks like edit text didn't get initialized properly
+    }
 
     }
 
     @Override
     public void onDetach() {
-
         super.onDetach();
 
     }
@@ -189,16 +208,15 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
 
-            String queryString = savedInstanceState.getString(TAG+et_searchById.getId());
+            String queryString = savedInstanceState.getString(TAG);
 
             if (queryString != null && !(queryString.equals(""))) {
-                et_searchById.setText(queryString);
 
             }
         }
-
-
     }
+
+
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -208,11 +226,4 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
         startActivity(clientActivityIntent);
 
     }
-
-    public void hideKeyboard() {
-
-        inputMethodManager.hideSoftInputFromWindow(et_searchById.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-
-    }
-
 }

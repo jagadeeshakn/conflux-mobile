@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="30sp"
             android:textSize="28sp"
             android:textColor="#010001"
             android:textAlignment="center"
@@ -59,7 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/abc_action_bar_title_text_size"
+            android:textSize="20dp"
             android:textColor="#010001"
             android:textAlignment="center"
             android:gravity="center"

@@ -3,6 +3,7 @@ package com.mifos.mifosxdroid.online;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -111,12 +114,17 @@ public class CreateNewClientActivity extends ActionBarActivity {
     private Calendar calendar;
     @InjectView(R.id.line_submission)
     LinearLayout line_submission;
+    InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_create_new_client);
         ButterKnife.inject(this);
+        inputMethodManager = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         Picasso.with(this).load(R.drawable.edit).resize((int) et_dob.getTextSize() + 30, (int) et_dob.getTextSize() + 30).into(edit_dob);
         Picasso.with(this).load(R.drawable.edit).resize((int) et_dob.getTextSize() + 30, (int) et_dob.getTextSize() + 30).into(edit_submission);
         Picasso.with(this).load(R.drawable.scanaadhar).resize(180, 100).into(bt_scan);
@@ -154,8 +162,12 @@ public class CreateNewClientActivity extends ActionBarActivity {
 
             }
         });
-
-
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP | android.support.v7.app.ActionBar.DISPLAY_SHOW_TITLE);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher);
+        getSupportActionBar().setTitle(R.string.dashboard);
+        getSupportActionBar().setSubtitle(R.string.create_new_client);
     }
 
 
@@ -453,12 +465,22 @@ public class CreateNewClientActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id)
+        {
+            case R.id.action_settings:
+            break;
+            case android.R.id.home:
+            //android.r.id.home is used to home button click listner
+            super.onBackPressed();
+            break;
+            default:break;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
 
+        //noinspection SimplifiableIfStatement
+        /*if (id == R.id.action_settings) {
+            return true;
+        }*/
         return super.onOptionsItemSelected(item);
     }
 }

@@ -5,6 +5,7 @@
 
 package com.mifos.mifosxdroid;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,12 +15,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -79,6 +82,10 @@ public class LoginActivity extends ActionBarActivity implements Callback<User>{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        android.support.v7.app.ActionBar actionBar=getSupportActionBar();
+        actionBar.setTitle(R.string.dashboard);
+        actionBar.setSubtitle(R.string.login);
+        actionBar.setLogo(R.mipmap.ic_launcher);
         context = LoginActivity.this;
       // sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -87,6 +94,7 @@ public class LoginActivity extends ActionBarActivity implements Callback<User>{
         TenantIdentifier=settingsPreferences.getString(Constants.TENANT_IDENTIFIER_KEY, "");
         previouslyEnteredPort=settingsPreferences.getString(Constants.INSTANCE_PORT_KEY,DEFALUT_PORT);
         url=settingsPreferences.getString(Constants.INSTANCE_URL_KEY,"");
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ButterKnife.inject(this);
         setupUI();
     }

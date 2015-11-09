@@ -12,6 +12,8 @@ public class FragmentConstants {
 
     public static final String FRAG_DOCUMENT_LIST = "Document List Fragment";
 
+    public static final String FRAG_CREATE_CENTER="Create New Center";
+
     public static final String FRAG_CLIENT_DETAILS = "Client Details Fragment";
 
     public static final String FRAG_LOAN_ACCOUNT_SUMMARY = "Loan Account Summary Fragment";

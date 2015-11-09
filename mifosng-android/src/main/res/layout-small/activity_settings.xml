@@ -1,122 +1,135 @@
-<ScrollView
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:fillViewport="false"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <TextView
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:fillViewport="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/conflux_instance_domain"
-            android:id="@+id/tv_title_instance"
-            android:textColor="#ff003fff"
-            android:layout_marginLeft="10dp"
-            android:layout_weight=".70"
-            android:gravity="center"
-            android:height="@dimen/abc_action_bar_stacked_max_height"
-            android:textStyle="bold"
-            android:textSize="@dimen/abc_action_bar_title_text_size" />
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_instanceURL"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:hint="@string/default_instance_url"
-            android:layout_below="@+id/tv_title_instance"
-            android:imeOptions="actionNext"
-            android:nextFocusDown="@+id/et_instancePort"
-            android:layout_centerHorizontal="true"
-            android:inputType="textUri|text"
-            android:textSize="20dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/conflux_instance_domain"
+                android:id="@+id/tv_title_instance"
+                android:textColor="#ff003fff"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="3"
+                android:gravity="center|center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:height="@dimen/abc_action_bar_stacked_max_height"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textSize="@dimen/abc_action_bar_title_text_size"
-            android:textColor="#010001"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text="@string/port"
-            android:layout_below="@+id/et_instanceURL"
-            android:id="@+id/tv_title_instance_port"
-            android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="20sp" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/et_instanceURL"
+                android:hint="@string/default_instance_url"
+                android:layout_below="@+id/tv_title_instance"
+                android:layout_centerHorizontal="true"
+                android:nextFocusDown="@+id/et_instancePort"
+                android:inputType="textUri|text"
+                android:textSize="20dp"
+                android:gravity="center_horizontal"
+                />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_title_instance_port"
-            android:id="@+id/et_instancePort"
-            android:inputType="number"
-            android:hint="@string/default_port"
-            android:imeOptions="actionNext"
-            android:nextFocusDown="@+id/et_tenantIdentifier"
-            android:textSize="25dp"
-            android:layout_centerHorizontal="true" />
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#010001"
-            android:layout_below="@+id/et_instancePort"
-            android:id="@+id/tv_constructed_instance_url"
-            android:layout_weight="2"
-            />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/abc_action_bar_title_text_size"
-            android:textColor="#010001"
-            android:textAlignment="center"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/tv_constructed_instance_url"
-            android:text="@string/tenant_identifier"
-            android:id="@+id/tv_tenant_identifier"
-            android:textStyle="bold" />
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_tenant_identifier"
-            android:id="@+id/et_tenantIdentifier"
-            android:inputType="text"
-            android:hint="@string/default_tenant"
-            android:layout_centerHorizontal="true"
-            android:gravity="center" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="20sp"
+                android:textColor="#010001"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:text="@string/port"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/et_instanceURL"
+                android:id="@+id/tv_title_instance_port"
+                android:textStyle="bold" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title_instance_port"
+                android:id="@+id/et_instancePort"
+                android:inputType="number"
+                android:layout_centerHorizontal="true"
+                android:hint="@string/default_port"
+                android:nextFocusDown="@+id/et_tenantIdentifier"
+                android:textSize="25dp"
+                android:gravity="center"
+                />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#010001"
+                android:layout_below="@+id/et_instancePort"
+                android:id="@+id/tv_constructed_instance_url"
+                android:layout_weight="2"
+                />
 
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="8.13"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:id="@+id/btnSave"
-            android:layout_below="@+id/et_tenantIdentifier"
-            android:layout_alignParentStart="true"
-            android:layout_gravity="left"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="onSave" />
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="8.13"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            android:layout_below="@+id/btnSave"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="goBack"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#010001"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:layout_below="@+id/tv_constructed_instance_url"
+                android:text="@string/tenant_identifier"
+                android:id="@+id/tv_tenant_identifier"
+                android:textStyle="bold" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/tv_tenant_identifier"
+                android:id="@+id/et_tenantIdentifier"
+                android:inputType="text"
+                android:hint="@string/default_tenant"
+                android:gravity="center"/>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:layout_below="@+id/et_tenantIdentifier">
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:id="@+id/btnSave"
+                    android:layout_below="@+id/et_tenantIdentifier"
+                    android:layout_gravity="left"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:onClick="onSave" />
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:layout_below="@+id/btnSave"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:onClick="goBack"/>
+            </LinearLayout>
 
 
 
-    </RelativeLayout>
-</ScrollView>
-
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
