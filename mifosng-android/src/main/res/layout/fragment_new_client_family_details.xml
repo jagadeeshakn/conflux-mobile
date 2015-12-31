@@ -1,0 +1,267 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollviewid"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:paddingBottom="0dp"
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp"
+    android:paddingTop="8dp">
+
+    <ScrollView
+        android:id="@+id/sl_family_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_family_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingBottom="30dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/ll_spinner_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_weight="1"
+                    android:background="@drawable/tableheading"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/sp_parent"
+                        android:layout_width="250dp"
+                        android:layout_height="43dp"
+                        android:layout_weight="0.6"
+                        android:background="@drawable/spinner_raidus"
+                        android:textColor="#f5420000" />
+
+                    <ImageButton
+                        android:id="@+id/bt_add_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:background="@color/colorPrimary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rl_first_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_parent_first_name"
+                        style="@style/FormLabel"
+                        android:layout_width="103dp"
+                        android:layout_height="34dp"
+                        android:text="First Name" />
+
+                    <EditText
+                        android:id="@+id/et_parent_first_name"
+                        android:layout_width="330dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.95"
+                        android:background="@drawable/edit_box"
+                        android:cursorVisible="true"
+                        android:ellipsize="start"
+                        android:focusable="true"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_first_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_parent_Last_name"
+                        style="@style/FormLabel"
+                        android:layout_width="108dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="0.05"
+                        android:text="Last Name" />
+
+                    <EditText
+                        android:id="@+id/et_parent_last_name"
+                        android:layout_width="330dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.95"
+                        android:background="@drawable/edit_box"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_parent_addview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_blank_space"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_dependent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/tableheading"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <Spinner
+                        android:id="@+id/sp_dependent"
+                        android:layout_width="250dp"
+                        android:layout_height="43dp"
+                        android:layout_weight="0.6"
+                        android:background="@drawable/spinner_raidus"
+                        android:textColor="#f5420000" />
+
+                    <ImageButton
+                        android:id="@+id/bt_add_dependent"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:background="@color/colorPrimary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rl_first_dependent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_dependent_first_name"
+                        style="@style/FormLabel"
+                        android:layout_width="108dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="0.05"
+                        android:text="First Name" />
+
+                    <EditText
+                        android:id="@+id/et_dependent_first_name"
+                        android:layout_width="330dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.95"
+                        android:background="@drawable/edit_box"
+                        android:cursorVisible="true"
+                        android:ellipsize="start"
+                        android:focusable="true"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_first_dependent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_dependent_Last_name"
+                        style="@style/FormLabel"
+                        android:layout_width="108dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="0.05"
+                        android:text="Last Name" />
+
+                    <EditText
+                        android:id="@+id/et_dependent_last_name"
+                        android:layout_width="330dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.95"
+                        android:background="@drawable/edit_box"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_add_dependent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_second_blank"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/sl_family_details"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/bt_next"
+            style="@style/button"
+            android:layout_width="177dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center"
+            android:onClick="clientbankDetails"
+            android:text="Next" />
+
+        <Button
+            android:id="@+id/bt_save"
+            style="@style/button"
+            android:layout_width="177dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="Save" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

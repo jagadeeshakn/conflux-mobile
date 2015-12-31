@@ -17,7 +17,7 @@ import com.mifos.objects.db.MeetingCenter;
 import com.mifos.objects.db.MeetingDate;
 import com.mifos.objects.db.OfflineCenter;
 import com.mifos.objects.db.Status;
-import com.mifos.services.data.Payload;
+import com.mifos.mifosxdroid.collectionsheet.data.Payload;
 import com.orm.query.Select;
 
 import java.util.HashMap;

@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This project is licensed under the open source MPL V2.
   ~ See https://github.com/openMF/android-client/blob/master/LICENSE.md
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mifos.mifosxdroid"
     android:versionCode="3"
-    android:versionName="0.4.0" >
+    android:versionName="0.4.0">
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -17,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -44,8 +44,8 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/login"
-            android:screenOrientation="portrait"
-            android:logo="@mipmap/ic_launcher"/>
+            android:logo="@mipmap/ic_launcher"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".online.LogoutActivity"
             android:label="@string/logout"
@@ -53,10 +53,36 @@
         <activity
             android:name=".online.DashboardFragmentActivity"
             android:label="@string/dashboard"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".online.AadharQrcode"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".createnewclient.activity.AadharQrcode"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".createnewclient.activity.ClientContactDetailsActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".createnewclient.activity.ClientFamilyDetailsActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".createnewclient.activity.ClientIncomeDtailsActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".createnewclient.activity.ClientCreditsDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".createnewclient.activity.ClientHomeVisitActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".createnewclient.activity.ClientBankDetailsActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".collectionsheet.activity.CollectionSheet"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".GroupActivity"
             android:configChanges="orientation|screenSize"
@@ -92,17 +118,15 @@
         <activity
             android:name=".online.ClientActivity"
             android:label="@string/title_activity_client"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".OfflineCenterInputActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".online.CentersActivity"
             android:label="@string/title_activity_centers"
             android:parentActivityName=".online.DashboardFragmentActivity"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mifos.mifosxdroid.online.DashboardFragmentActivity" />
@@ -113,9 +137,9 @@
             android:value="b781afbde2e7db1df8455861d3f5d59c158f3bff" />
 
         <activity
-            android:name=".online.GenerateCollectionSheet"
+            android:name=".collectionsheet.activity.GenerateCollectionSheet"
             android:label="@string/title_activity_generate_collection_sheet"
-            android:parentActivityName=".online.DashboardFragmentActivity" >
+            android:parentActivityName=".online.DashboardFragmentActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mifos.mifosxdroid.online.DashboardFragmentActivity" />
@@ -125,12 +149,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Settings"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".online.CreateNewClientActivity"
-            android:label="@string/title_activity_create_client" >
-        </activity>
+            android:name=".createnewclient.activity.CreateNewClientActivity"
+            android:label="@string/title_activity_create_client"></activity>
 
     </application>
 

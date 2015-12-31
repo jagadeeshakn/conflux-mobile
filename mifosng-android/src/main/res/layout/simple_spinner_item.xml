@@ -2,7 +2,7 @@
     android:id="@android:id/text1"
     android:singleLine="true"
     android:textColor="#f50d0000"
-    android:textSize="20sp"
+    android:textSize="15sp"
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

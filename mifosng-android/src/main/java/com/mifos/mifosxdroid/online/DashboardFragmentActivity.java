@@ -16,11 +16,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
 import com.mifos.mifosxdroid.OfflineCenterInputActivity;
 import com.mifos.mifosxdroid.R;
+import com.mifos.objects.db.UserDetails;
 import com.mifos.utils.FragmentConstants;
 
-
+import java.util.Iterator;
 
 public class DashboardFragmentActivity extends ActionBarActivity {
 
@@ -30,12 +32,17 @@ public class DashboardFragmentActivity extends ActionBarActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG,getResources().getString(R.string.login_successful));
+        Log.i(TAG, getResources().getString(R.string.login_successful));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         HomeFragment homeFragment=new HomeFragment();
         FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.dashboard_global_container, homeFragment, "HomeFragment");
+
+      /* List<Permissions> permission=Permissions.listAll(Permissions.class);
+
+       */
+
+        fragmentTransaction.replace(R.id.dashboard_global_container, homeFragment, getApplication().getResources().getString(R.string.home_fragment));
         fragmentTransaction.commit();
        //to enable home button
         getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_HOME_AS_UP | android.support.v7.app.ActionBar.DISPLAY_SHOW_TITLE);
@@ -64,7 +71,7 @@ public class DashboardFragmentActivity extends ActionBarActivity {
             String fragmentName=backEntry.getName();
             System.out.println("fragment name"+fragmentName);
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(fragmentName);
-            if(fragmentName== FragmentConstants.FRAG_CLIENT_SEARCH)
+            if(fragmentName.equals(FragmentConstants.FRAG_CLIENT_SEARCH))
             {
                 startClientSearchFragment(fragment,fragmentName);
             }
@@ -84,7 +91,6 @@ public class DashboardFragmentActivity extends ActionBarActivity {
     }
     public void startFragmentPresentInBackStack(Fragment fragment,String TAG)
     {
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.dashboard_global_container, fragment,TAG);
         fragmentTransaction.commit();

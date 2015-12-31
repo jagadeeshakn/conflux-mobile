@@ -27,7 +27,8 @@ import com.mifos.mifosxdroid.adapters.MenuListAdapter;
 import com.mifos.mifosxdroid.online.CentersActivity;
 import com.mifos.mifosxdroid.online.ClientListFragment;
 import com.mifos.mifosxdroid.online.CreateCenterFragment;
-import com.mifos.mifosxdroid.online.CreateNewClientActivity;
+import com.mifos.mifosxdroid.createnewclient.activity.CreateNewClientActivity;
+import com.mifos.mifosxdroid.collectionsheet.activity.GenerateCollectionSheet;
 import com.mifos.utils.FragmentConstants;
 import com.squareup.picasso.Picasso;
 
@@ -108,6 +109,13 @@ public class GetMenuListFragment extends Fragment {
         return rootView;
     }
 
+
+    @OnClick(R.id.btn_collection_sheet)
+    public void collectionsheet(View view)
+    {
+        startActivity(new Intent(getActivity(), GenerateCollectionSheet.class));
+    }
+
     @OnClick(R.id.btn_create_new_client)
     public void createClient(View view)
     {
@@ -132,6 +140,13 @@ public class GetMenuListFragment extends Fragment {
         popStacEntryFragments();
         startActivity(new Intent(getActivity(), CentersActivity.class));
     }
+    @OnClick(R.id.btn_collection_sheet)
+            public void collectionSheet(View view){
+        Log.i(TAG,"Collection sheet has been initiated");
+        popStacEntryFragments();
+        startActivity(new Intent(getActivity(), GenerateCollectionSheet.class));
+    }
+
 
     MenuListAdapter.OnItemClickListener onItemClickListener= new MenuListAdapter.OnItemClickListener() {
         @Override

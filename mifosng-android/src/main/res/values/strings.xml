@@ -9,10 +9,11 @@
     <!-- General Terms Begin Here -->
     <string name="app_name">Conflux-CBS</string>
     <string name="datatables">Datatables</string>
-    <string name="settings">Settings</string>
+    <string name="settings" translatable="false">Settings</string>
     <string name="login">Login</string>
     <string name="search">Search</string>
     <string name="group_name">Group Name</string>
+    <string name="enter_group_name" translatable="false">Group Name *</string>
     <string name="staff_name">Staff Name</string>
     <string name="level_name">Level Name</string>
     <string name="offline">Offline *</string>
@@ -21,6 +22,7 @@
     <string name="total">Total</string>
     <string name="client_name">Client Name</string>
     <string name="client">Client</string>
+    <string name="manage_clients" translatable="false">Manage Clients</string>
     <string name="save">Save</string>
     <string name="confirm_delete_client_image">Are you sure you want to delete this client\'s image?</string>
     <string name="default_instance_url" translatable="false">demo.openmf.org</string>
@@ -37,12 +39,12 @@
     <string name="external_id">External ID</string>
     <string name="activation_date">Activation Date</string>
     <string name="office">Office</string>
-    <string name="group">Group</string>
+    <string name="group">Groups</string>
     <string name="cancel">Cancel</string>
     <string name="review_payment">Review Payment</string>
     <string name="center_name">Center Name</string>
     <string name="center_id">Center Id</string>
-    <string name="create_client">Create Client</string>
+    <string name="create_client" translatable="false">Create Client</string>
     <string name="staff_id">Staff Id</string>
     <string name="office_id">Office Id</string>
     <string name="id">ID</string>
@@ -59,8 +61,16 @@
     <string name="generate_collection_sheet">Generate Collection Sheet</string>
     <string name="clear_data">Clear Data</string>
     <string name="branch_id">Branch Id</string>
+    <string name="cgt" translatable="false">CGT</string>
+    <string name="create_group" translatable="false">Create New Group</string>
+    <string name="add_new_client" translatable="false">Create New Client</string>
+    <string name="mange_clients" translatable="false">Manage Clients</string>
+    <string name="update_changes" translatable="false">Update the Changes</string>
+    <string name="transfer_client" translatable="false">Transfer Client</string>
+    <string name="select_client_to_transfer" translatable="false">Select Client(s) To Transfer</string>
     <!-- General Terms End Here -->
 
+    <string name="home_fragment" translatable="false">Home Fragment</string>
 
     <!-- Group Terms Begin Here -->
     <string name="active">Active</string>
@@ -140,6 +150,7 @@
     <string name="savings_interest_earned">Interest Earned</string>
     <string name="sync">Sync</string>
     <string name="enter_center_id">Center Id</string>
+
     <string name="tap_to_select_date">Tap to select date</string>
     <!-- Menu Item Names End Here -->
     <string name="title_center_list">Groups</string>
@@ -172,10 +183,22 @@
     <string name="error_select_staff">Please Select a Staff</string>
     <string name="error_select_center">Please Select a Center</string>
     <string name="error_client_inactive">Client Inactive</string>
+    <string name="error_select_parent">Please Select an Parent</string>
+    <string name="error_select_dependent">Please Select an Dependent</string>
+    <string name="error_select_inocme">Please Select an IncomeType</string>
+    <string name="error_select_source">Please Select an SourceOfIncome</string>
+    <string name="error_select_expenses">Please Select an Expenses</string>
 
     <!-- DropDown Defaults -->
     <string name="spinner_office">Select Office</string>
+    <string name="spinner_parent">Select Parent</string>
+    <string name="spinner_dependent">Select Dependent</string>
+    <string name="spinner_income">Select Income</string>
+    <string name="spinner_source_of_income">Select SourceOfIncome</string>
+    <string name="spinner_expenses">Select Expenses</string>
     <string name="spinner_staff">Select Loan Officer</string>
+    <string name="spinner_staff_1" translatable="false">Select Staff 1</string>
+    <string name="spinner_staff_2" translatable="false">Select Staff 2</string>
     <string name="spinner_center">Select Center</string>
     <string name="spinner_group">Select Group</string>
     <string name="total_due">Total Due</string>
@@ -197,20 +220,20 @@
     <string name="large_text">Large Text</string>
     <string name="product_name">Product Name</string>
     <string name="valid">Valid</string>
-    <string name="error_should_contain_only">should contain only</string>
-    <string name="error_cannot_be_empty">cannot be empty</string>
-    <string name="first_name">First name</string>
-    <string name="last_name">Last name</string>
+    <string name="error_should_contain_only" translatable="false">should contain only</string>
+    <string name="error_cannot_be_empty" translatable="false">cannot be empty</string>
+    <string name="first_name" translatable="false">First name</string>
+    <string name="last_name" translatable="false">Last name</string>
     <string name="the_input">The Input</string>
-    <string name="flash_on">flash_on</string>
-    <string name="flash_off">flash_off</string>
-    <string name="auto_focus_on">focus_on</string>
-    <string name="auto_focus_off">focus_off</string>
-    <string name="formats">formats</string>
-    <string name="select_camera">select_camera</string>
-    <string name="Ok">Ok</string>
-    <string name="Cancel">Cancel</string>
-    <string name="choose_formats">choose_formats</string>
+    <string name="flash_on" translatable="false">flash_on</string>
+    <string name="flash_off" translatable="false">flash_off</string>
+    <string name="auto_focus_on" translatable="false">focus_on</string>
+    <string name="auto_focus_off" translatable="false">focus_off</string>
+    <string name="formats" translatable="false">formats</string>
+    <string name="select_camera" translatable="false">select_camera</string>
+    <string name="Ok" translatable="false">Ok</string>
+    <string name="Cancel" translatable="false">Cancel</string>
+    <string name="choose_formats" translatable="false">choose_formats</string>
     <string-array name="office_ids">
         <item>Head Office</item>
         <item>Office 1 </item>
@@ -221,20 +244,103 @@
         <item>office 6</item>
         <item>office 7</item>
     </string-array>
-    <string name="title_activity_settings">Settings</string>
-    <string name="Gender_prompt">Choose Gender</string>
-    <string name="create_new_center">Create New Center</string>
+    <string name="title_activity_settings" translatable="false">Settings</string>
+    <string name="Gender_prompt" translatable="false">Choose Gender</string>
+    <string name="create_new_center" translatable="false">Create New Center</string>
     <string name="home">Home</string>
-    <string name="create_new_client">Create New Client</string>
+
+    <string name="client_bank_details">Client Bank Details</string>
+    <string name="client_income_details">Client Income Details</string>
+    <string name="client_credit_checks">Credit Checks</string>
+    <string name="client_home_visit">Home Visit</string>
+    <string name="client_contact_details">Client Contact Details</string>
+    <string name="client_family_details">Client Family Details</string>
+    <string name="create_new_client" translatable="false">Create New Client</string>
     <string-array name="gend">
 
     </string-array>
     <string-array name="gender_name">
         <item>Female</item>
         <item>Male</item>
+        <item>Other</item>
     </string-array>
-    <string name="title_activity_create_client"></string>
->>>>>>> exception handling has been fixed and new center creation feature has been added
+    <string-array name="spouse_name">
+        <item>Husband</item>
+        <item>Wife</item>
+    </string-array>
+    <string-array name="childern_name">
+        <item>Son</item>
+        <item>Daughter</item>
+    </string-array>
+    <string-array name="attendance">
+        <item>Present</item>
+        <item>Absent</item>
+    </string-array>
+    <string name="no_center">nocenter</string>
+    <string name="new_client">New Client</string>
+    <string name="home_visit">Home Visit</string>
+    <string name="contact_details">Contact Details</string>
+    <string name="permanent_address">Permanent Address</string>
+    <string name="current_address">Current Address</string>
+    <string name="family_details">Family Details</string>
+    <string name="income_details">Incomes : </string>
+    <string name="expenses_details">Expenses :</string>
+    <string name="income_total">Total</string>
+    <string name="bank_details">Bank Details</string>
+    <string name="Parent_type">Parent</string>
+    <string name="client_income">Income</string>
+    <string name="client_expenses">Expenses</string>
+    <string name="Parent_FirstName">First Name</string>
+    <string name="Parent_LastName">Last Name</string>
+    <string name="Dependent_details">Dependents</string>
+    <string name="Parent_Dependent_FirstName">First Name</string>
+    <string name="Parent_Dependent_LastName">Last Name</string>
+    <string name="Income_type">Income Type</string>
+    <string name="Income_type_amount">Amount</string>
+    <string name="Expenses_type_amount">Amount</string>
+    <string name="Total_income">Total Income</string>
+    <string name="Total_Expenses">Total Expenses</string>
+    <string name="Source_Of_Income">Source Of Income</string>
+    <string name="Expenses">Expenses</string>
+    <string name="No_of_loans">No. Of Loans</string>
+    <string name="indebtedness">Indebtedness</string>
+    <string name="No_of_MIFs">No. Of MIFs</string>
+    <string name="arrears">Arrears</string>
 
+    <string name="distance_from_center">Distance From Center</string>
+    <string name="eligible_amount">Eligible Amount</string>
 
+    <string name="title_activity_create_client" translatable="false">Create Client</string>
+    <!--grt fragment string -->
+    <string name="grt">GRT</string>
+    <string name="next_grt_date" translatable="false">GRT Next Planned Date</string>
+    <string name="comment" translatable="false">Comment :</string>
+    <string name="planned" translatable="false">Planned Date : </string>
+    <string name="done" translatable="false">Done Date : </string>
+    <string name="reschedule_grt_success" translatable="false">Grt has been rescheduled Successfully</string>
+    <string name="err_staff_names_same" translatable="false">Staff 1 and Staff 2 cannot be same.</string>
+    <string name="err_staff_names_empty" translatable="false">Please select Staff 1 and Staff 2</string>
+    <string name="err_staff_name_one" translatable="false">Please Select Staff 1.</string>
+    <string name="err_staff_name_two" translatable="false">Please Select Staff 2.</string>
+    <string name="attendance" translatable="false">Attendance</string>
+    <string name="office_name">Office *</string>
+    <string name="status">Status :</string>
+    <string name="submission_data">Submitted On</string>
+    <string name="submit">Submit</string>
+    <string name="create_center_name">Name *</string>
+    <string name="center_activation">Activate Center</string>
+    <string name="confluux_instance_domain">Conflux</string>
+    <string name="create_center">Create New Center</string>
+    <string name="dashboard_onResume">Dashboard has been Restarted</string>
+    <string name="invalid_saff_name">Please Select a proper Staff Name.</string>
+    <string name="is_invalid">is invalid. Please Select a proper Office.</string>
+    <string name="login_successful">Login successful. Dashboard has be started</string>
+    <string name="menu_options">Menu items has been populated in home fragment</string>
+    <string name="searchbar">SearchBar has been Created</string>
+    <string name="officeId" translatable="false">Select Office *</string>
+    <string name="centerId" translatable="false">Select Center</string>
+    <string name="staffId" translatable="false">Select Staff</string>
+    <string name="group_name_text" translatable="false">Group Name *</string>
+    <string name="select_office" translatable="false">Select Office</string>
+    <string name="group_activate">Activate Group</string>
 </resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ This project is licensed under the open source MPL V2.
+  ~ See https://github.com/openMF/android-client/blob/master/LICENSE.md
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:id="@+id/rl_row_client"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/medium_text"
+        android:id="@+id/tv_clientName"
+        android:paddingLeft="8dp"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/quickContactBadge" />
+
+
+
+    <QuickContactBadge
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/quickContactBadge"
+        android:src="@drawable/ic_dp_placeholder"
+        android:padding="8dp"
+        android:maxHeight="96dp"
+        android:maxWidth="96dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/small_text"
+        android:id="@+id/tv_clientAccountNumber"
+        android:layout_below="@+id/tv_clientName"
+        android:textColor="@color/black"
+        android:layout_alignLeft="@+id/tv_clientName"
+        android:paddingLeft="8dp"/>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="30dp"
+        android:maxWidth="45dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/chk_bx_delete"
+        android:button="@drawable/checkbox_delete_action"
+        android:layout_centerInParent="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

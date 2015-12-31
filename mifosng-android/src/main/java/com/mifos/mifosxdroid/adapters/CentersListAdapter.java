@@ -70,10 +70,17 @@ public class CentersListAdapter extends BaseAdapter {
         viewHolder.tv_office_id = (TextView) view.findViewById(R.id.tv_office_id);
         viewHolder.tv_office_name = (TextView) view.findViewById(R.id.tv_office_name);
 
-        viewHolder.tv_center_id.setText(resources.getString(R.string.center_id)+centers.get(i).getId());
+        viewHolder.tv_center_id.setText(resources.getString(R.string.center_id)+" "+centers.get(i).getId());
         viewHolder.tv_center_name.setText(centers.get(i).getName());
+        if(centers.get(i).getStaffId()!=null)
+        {
+            viewHolder.tv_staff_id.setText(resources.getString(R.string.staff_id)+" "+centers.get(i).getStaffId());
+        }
+        else
+        {
+            viewHolder.tv_staff_id.setText("");
+        }
 
-        viewHolder.tv_staff_id.setText(resources.getString(R.string.staff_id)+centers.get(i).getStaffId());
         viewHolder.tv_staff_name.setText(centers.get(i).getStaffName());
 
         viewHolder.tv_office_id.setText(resources.getString(R.string.office_id)+centers.get(i).getOfficeId());

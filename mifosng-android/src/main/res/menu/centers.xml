@@ -9,9 +9,9 @@
     tools:context="com.mifos.mifosxdroid.online.CentersActivity" >
 
 
-    <item android:id="@+id/mItem_search"
-        android:title="@string/search"
-        app:showAsAction="always"
+    <item android:id="@+id/logout"
+        android:title="@string/logout"
+        app:showAsAction="never"
         android:orderInCategory="1000"/>
 
 </menu>

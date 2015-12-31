@@ -6,6 +6,7 @@
 
 <resources>
     <color name="colorPrimary">#4C66A4</color>
+    <color name="edit_text_onfocus">#6666FF</color>
     <!--<color name="colorPrimary"> #283593</color>-->
     <color name="colorPrimaryDark">#d8ff0317</color>
     <color name="black">#000000</color>
@@ -55,6 +56,11 @@
     <color name="blue_bright">#ff00ddff</color>
     <!-- A really bright Holo shade of gray -->
     <color name="gray_bright">#33CCCCCC</color>
+
+    <color name="pressed_color">#4d90fe</color>
+    <color name="default_color">#00ffffff</color>
+
+    <color name="white">#ffffff</color>
 
 
 

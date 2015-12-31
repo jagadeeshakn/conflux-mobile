@@ -80,7 +80,7 @@ public class ClientActivity extends ActionBarActivity implements ClientDetailsFr
 
     /*
      * Called when a Loan Account is Selected
-     * from the list of Loan Accounts on Client Details Fragment
+     * from the incomeList of Loan Accounts on Client Details Fragment
      * It displays the summary of the Selected Loan Account
      */
 
@@ -97,7 +97,7 @@ public class ClientActivity extends ActionBarActivity implements ClientDetailsFr
 
     /*
      * Called when a Savings Account is Selected
-     * from the list of Savings Accounts on Client Details Fragment
+     * from the incomeList of Savings Accounts on Client Details Fragment
      *
      * It displays the summary of the Selected Savings Account
      */

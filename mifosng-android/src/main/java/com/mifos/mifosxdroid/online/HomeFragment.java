@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mifos.mifosxdroid.R;
@@ -95,6 +97,25 @@ public class HomeFragment extends Fragment {
        ButterKnife.inject(this, rootView);
         Log.i(TAG, getResources().getString(R.string.searchbar));
         loadmenufragment();
+        et_searchById.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    String clientId=textView.getText().toString().trim();
+                    if(clientId.equals(""))
+                    {
+                        Toast.makeText(getActivity(),"Client name cannot be empty",Toast.LENGTH_LONG).show();
+                    }
+                    else
+                    {
+                        popStacEntryFragments();
+                        startClientSearchFragment(clientId);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         et_searchById.setText("");
         return rootView;
@@ -107,19 +128,33 @@ public class HomeFragment extends Fragment {
         //Import the the Home Screen Menu
 
         String[] strings=getResources().getStringArray(R.array.menu_list);
-
         MenuListData.setMenuListArray(strings);
         GetMenuListFragment getFragment = new GetMenuListFragment();
         FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.home_dashboard_container, getFragment, "list fragment");
+        fragmentTransaction.replace(R.id.home_dashboard_container, getFragment, "incomeList fragment");
         fragmentTransaction.commit();
     }
+
+
 
     @OnClick(R.id.bt_searchClient)
     public void SearchClient()
     {
-        popStacEntryFragments();
+
         String clientId=et_searchById.getText().toString().trim();
+        if(clientId.trim().equals(""))
+        {
+            Toast.makeText(getActivity(),"Client name cannot be empty",Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            popStacEntryFragments();
+            startClientSearchFragment(clientId);
+        }
+    }
+
+    public void startClientSearchFragment(String clientId)
+    {
         clientSearchFragment=clientSearchFragment.newInstance();
         clientSearchFragment.setSearchQuery(clientId);
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -127,7 +162,6 @@ public class HomeFragment extends Fragment {
         fragmentTransaction.replace(R.id.home_dashboard_container, clientSearchFragment, FragmentConstants.FRAG_CLIENT_SEARCH);
         fragmentTransaction.commit();
     }
-
 
     public void popStacEntryFragments() {
         if(getActivity().getSupportFragmentManager().getBackStackEntryCount()!=0)

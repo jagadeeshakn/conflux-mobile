@@ -7,11 +7,12 @@ package com.mifos.services;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.mifos.exceptions.MifosRestErrorHandler;
+import com.mifos.objects.ClientDetail;
+import com.mifos.objects.ClientTransfer;
+import com.mifos.objects.ClientTransferResponse;
 import com.mifos.objects.SearchedEntity;
 import com.mifos.objects.User;
 import com.mifos.objects.accounts.ClientAccounts;
@@ -23,6 +24,8 @@ import com.mifos.objects.accounts.savings.SavingsAccountTransactionRequest;
 import com.mifos.objects.accounts.savings.SavingsAccountTransactionResponse;
 import com.mifos.objects.accounts.savings.SavingsAccountWithAssociations;
 import com.mifos.objects.client.Client;
+import com.mifos.objects.client.ClientDisassociate;
+import com.mifos.objects.client.ClientIdObject;
 import com.mifos.objects.client.Page;
 import com.mifos.objects.db.CenterCreationResponse;
 import com.mifos.objects.db.CollectionSheet;
@@ -30,6 +33,8 @@ import com.mifos.objects.db.OfflineCenter;
 import com.mifos.objects.group.Center;
 import com.mifos.objects.group.CenterWithAssociations;
 import com.mifos.objects.group.Group;
+import com.mifos.objects.group.GroupCreationResponseData;
+import com.mifos.objects.group.GroupPayload;
 import com.mifos.objects.group.GroupWithAssociations;
 import com.mifos.objects.noncore.DataTable;
 import com.mifos.objects.noncore.Document;
@@ -39,27 +44,18 @@ import com.mifos.objects.organisation.Staff;
 import com.mifos.objects.templates.loans.LoanRepaymentTemplate;
 import com.mifos.objects.templates.savings.SavingsAccountTransactionTemplate;
 import com.mifos.services.data.APIEndPoint;
-import com.mifos.services.data.CenterPayload;
-import com.mifos.services.data.ClientPayload;
-import com.mifos.services.data.CollectionSheetPayload;
+import com.mifos.objects.CenterPayload;
+import com.mifos.mifosxdroid.createnewclient.data.ClientPayload;
+import com.mifos.mifosxdroid.collectionsheet.data.CollectionSheetPayload;
 import com.mifos.services.data.GpsCoordinatesRequest;
 import com.mifos.services.data.GpsCoordinatesResponse;
-import com.mifos.services.data.Payload;
+import com.mifos.mifosxdroid.collectionsheet.data.Payload;
 import com.mifos.services.data.SaveResponse;
 import com.mifos.utils.Constants;
-import com.mifos.utils.MFError;
-import com.mifos.utils.MFErrorResponse;
 import com.squareup.okhttp.OkHttpClient;
 
-import org.apache.http.HttpStatus;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.security.cert.CertificateException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -71,7 +67,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import retrofit.Callback;
-import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -89,7 +84,6 @@ import retrofit.http.Path;
 import retrofit.http.Query;
 import retrofit.http.QueryMap;
 import retrofit.mime.TypedFile;
-import retrofit.mime.TypedString;
 
 public class API {
     public static final String TAG = API.class.getName();
@@ -121,28 +115,24 @@ public class API {
     public IdentifierService identifierService;
     public OfficeService officeService;
     public StaffService staffService;
-    private RestAdapter.Builder restAdapterBuilder;
-    private static TrustManager[] trustAllCerts;
-    private static SSLContext sslContext;
-    private static SSLSocketFactory sslSocketFactory;
     public static String userErrorMessage;
 
 
     public API(final String url, final String tenantIdentifier, boolean shouldByPassSSLSecurity) {
 
-        restAdapterBuilder = new RestAdapter.Builder();
+        RestAdapter.Builder restAdapterBuilder = new RestAdapter.Builder();
         restAdapterBuilder.setEndpoint(url);
         if (shouldByPassSSLSecurity) {
             restAdapterBuilder.setClient(new OkClient(getUnsafeOkHttpClient()));
         }
         restAdapterBuilder.setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade request) {
-                        if (tenantIdentifier != null  && !tenantIdentifier.isEmpty()) {
-                            request.addHeader(HEADER_MIFOS_TENANT_ID, tenantIdentifier);
-                        } else {
-                            request.addHeader(HEADER_MIFOS_TENANT_ID, "default");
-                        }
+            @Override
+            public void intercept(RequestFacade request) {
+                if (tenantIdentifier != null && !tenantIdentifier.isEmpty()) {
+                    request.addHeader(HEADER_MIFOS_TENANT_ID, tenantIdentifier);
+                } else {
+                    request.addHeader(HEADER_MIFOS_TENANT_ID, "default");
+                }
 
                         /*
                             Look for the Auth token in the shared preferences
@@ -150,16 +140,16 @@ public class API {
                             supply the Authorization Header in every request
                         */
 
-                        SharedPreferences pref = PreferenceManager
-                                .getDefaultSharedPreferences(Constants.applicationContext);
-                        String authToken = pref.getString(User.AUTHENTICATION_KEY, "NA");
+                SharedPreferences pref = PreferenceManager
+                        .getDefaultSharedPreferences(Constants.applicationContext);
+                String authToken = pref.getString(User.AUTHENTICATION_KEY, "NA");
 
-                        if (authToken != null && !"NA".equals(authToken)) {
-                            request.addHeader(HEADER_AUTHORIZATION, authToken);
-                        }
+                if (authToken != null && !"NA".equals(authToken)) {
+                    request.addHeader(HEADER_AUTHORIZATION, authToken);
+                }
 
-                    }
-                });
+            }
+        });
         restAdapterBuilder.setErrorHandler(new MifosRestErrorHandler());
         RestAdapter restAdapter = restAdapterBuilder.build();
         // TODO: This logging is sometimes excessive, e.g. for client image requests.
@@ -180,7 +170,6 @@ public class API {
         officeService = restAdapter.create(OfficeService.class);
         staffService = restAdapter.create(StaffService.class);
     }
-
     public void getCertificate()
     {
         getUnsafeOkHttpClient();
@@ -188,10 +177,11 @@ public class API {
 
 
 
+
     private  OkHttpClient getUnsafeOkHttpClient() {
         try {
             // Create a trust manager that does not validate certificate chains
-                    trustAllCerts = new TrustManager[] {
+            final TrustManager[] trustAllCerts = new TrustManager[] {
                     new X509TrustManager() {
                         @Override
                         public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
@@ -209,10 +199,10 @@ public class API {
             };
 
             // Install the all-trusting trust manager
-            sslContext = SSLContext.getInstance("SSL");
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
             // Create an ssl socket factory with our all-trusting manager
-            sslSocketFactory = sslContext.getSocketFactory();
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
             OkHttpClient okHttpClient = new OkHttpClient();
             okHttpClient.setSslSocketFactory(sslSocketFactory);
@@ -235,12 +225,12 @@ public class API {
         Callback<T> cb = new Callback<T>() {
             @Override
             public void success(T o, Response response) {
-               // System.out.println("Object " + o);
+                System.out.println("Object " + o);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                //System.out.println("Error: " + retrofitError);
+                System.out.println("Error: " + retrofitError);
             }
         };
 
@@ -251,13 +241,12 @@ public class API {
         Callback<List<T>> cb = new Callback<List<T>>() {
             @Override
             public void success(List<T> o, Response response) {
-
-                //System.out.println("Object " + o);
+                System.out.println("Object " + o);
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-               // System.out.println("Error: " + retrofitError);
+                System.out.println("Error: " + retrofitError);
             }
         };
 
@@ -312,6 +301,8 @@ public class API {
                                   @Query("meetingDate") String meetingDate, @Query("officeId") int officeId,
                                   @Query("staffId") int staffId, Callback<List<OfflineCenter>> callback);
 
+
+
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         @POST(APIEndPoint.CENTERS)
         public void createCenter(@Body CenterPayload centerPayload,Callback<CenterCreationResponse>  centerCreationResponseCallback);
@@ -353,13 +344,12 @@ public class API {
         void deleteClientImage(@Path("clientId") int clientId, Callback<Response> responseCallback);
 
         //TODO: Implement when API Fixed
-        //@Headers({"Accept: application/octet-stream", CONTENT_TYPE_JSON})
-      //  @GET("/clients/{clientId}/images")
-        //public void getClientImage(@Path("clientId") int clientId, Callback<TypedString> callback);
+
 
         @Headers({"Accept: application/octet-stream"})
         @GET(APIEndPoint.CLIENTS+"/{clientId}/images")
         public void getClientImage(@Path("clientId") int clientId,@Query("maxHeight") int maxHeight,@Query("maxWidth") int maxWidth, Callback<Response> callback);
+
 
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         @POST(APIEndPoint.CLIENTS)
@@ -371,6 +361,10 @@ public class API {
         @GET(APIEndPoint.SEARCH + "?resource=clients")
         public void searchClientsByName(@Query("query") String clientName,
                                         Callback<List<SearchedEntity>> listCallback);
+
+        @Headers({ACCEPT_JSON,CONTENT_TYPE_JSON})
+        @GET(APIEndPoint.CLIENTS)
+        public void searchClient(@Query("displayName")String searchQuery,@Query("officeId")int officeId,@Query("orderBy")String orderBy,@Query("orphansOnly")boolean orphansOnly,@Query("sortOrder")String sortOrder,Callback<ClientDetail> clientSearch);
     }
 
 
@@ -415,7 +409,7 @@ public class API {
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         @GET(APIEndPoint.LOANS + "/{loanId}?associations=repaymentSchedule")
         public void getLoanRepaymentSchedule(@Path("loanId") int loanId,
-                                              Callback<LoanWithAssociations> loanWithRepaymentScheduleCallback);
+                                             Callback<LoanWithAssociations> loanWithRepaymentScheduleCallback);
 
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         @GET(APIEndPoint.LOANS + "/{loanId}?associations=transactions")
@@ -458,9 +452,9 @@ public class API {
         @POST("/{savingsAccountType}/{savingsAccountId}/transactions")
         public void processTransaction(@Path("savingsAccountType") String savingsAccountType,
                                        @Path("savingsAccountId") int savingsAccountId,
-                                              @Query("command") String transactionType,
-                                              @Body SavingsAccountTransactionRequest savingsAccountTransactionRequest,
-                                              Callback<SavingsAccountTransactionResponse> savingsAccountTransactionResponseCallback);
+                                       @Query("command") String transactionType,
+                                       @Body SavingsAccountTransactionRequest savingsAccountTransactionRequest,
+                                       Callback<SavingsAccountTransactionResponse> savingsAccountTransactionResponseCallback);
 
 
     }
@@ -563,7 +557,7 @@ public class API {
 
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         @POST(APIEndPoint.AUTHENTICATION)
-        public void authenticate(@Query("username") String username, @Query("password") String password, Callback<User> userFCallback);
+        public void authenticate(@Query("username") String username, @Query("password") String password, Callback<User> userCallback);
 
     }
 
@@ -597,6 +591,26 @@ public class API {
         @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
         public void getAllGroupsInOffice(@Query("officeId") int officeId, @QueryMap Map<String, Object> params, Callback<List<Group>> listOfGroupsCallback);
 
+        @POST(APIEndPoint.GROUPS+"/{groupId}?command=disassociateClients")
+        @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
+        public void disassociateClients(@Path("groupId") int groupId,@Body ClientIdObject clientMembers,Callback<ClientDisassociate> clientDisassociateCallback);
+
+        @POST(APIEndPoint.GROUPS+"/{groupId}?command=associateClients")
+        @Headers({ACCEPT_JSON, CONTENT_TYPE_JSON})
+        public void associateClients(@Path("groupId") int groupId,@Body ClientIdObject clientMembers,Callback<ClientDisassociate> clientDisassociateCallback);
+
+        @POST(APIEndPoint.GROUPS+"/{groupId}?command=transferClients")
+        @Headers({ACCEPT_JSON,CONTENT_TYPE_JSON})
+        public void transferCLient(@Path("groupId") int groupId,@Body ClientTransfer clientTransfer,Callback<ClientTransferResponse> clientTransferResponseCallback);
+
+        @GET(APIEndPoint.GROUPS)
+        @Headers({ACCEPT_JSON,CONTENT_TYPE_JSON})
+        public void getGroupsInOffice(@Query("name") String name,@Query("officeId")int officeId,@Query("orderBy")String orderBy,@Query("sortOrder")String sortOrder,Callback<List<Group>> listOfGroupsCallbac);
+
+        @POST((APIEndPoint.GROUPS))
+        @Headers({ACCEPT_JSON,CONTENT_TYPE_JSON})
+        public void createGroup(@Body GroupPayload groupPayload,Callback<GroupCreationResponseData> creationResponseDataCallback);
+
     }
 
     /**
@@ -621,109 +635,4 @@ public class API {
         public void getStaffForOffice(@Query("officeId")int officeId, Callback<List<Staff>> staffListCallback);
 
     }
-
-    static class MifosRestErrorHandler implements ErrorHandler {
-        String errorStringJSON = null;
-        List<MFError> errorResponses;
-        @Override
-        public Throwable handleError(RetrofitError retrofitError) {
-
-            Response response = retrofitError.getResponse();
-            String errorStringJSON = null;
-            if (response != null) {
-
-                if (response.getStatus() == HttpStatus.SC_UNAUTHORIZED) {
-                    Log.e("Status", "Authentication Error.");
-
-
-                } else if (response.getStatus() == HttpStatus.SC_BAD_REQUEST) {
-                    try {
-                        errorStringJSON=getStringFromInputStream(response.getBody().in());
-                    } catch (IOException e) {
-                        Log.e("ERROR", "BAD Request -Invalid Parameter of Data Integrity Issue");
-                    }
-                    MFErrorResponse mfErrorResponse = new Gson().fromJson(errorStringJSON, MFErrorResponse.class);
-                    errorResponses=mfErrorResponse.getErrors();
-                    MFError error=errorResponses.get(0);
-                    userErrorMessage=error.getDefaultUserMessage();
-                    /*userErrorMessage=mfErrorResponse.getDefaultUserMessage();*/
-                    Log.d("Status", "Bad Request - Invalid Parameter or Data Integrity Issue.");
-                    Log.d("URL", response.getUrl());
-                    List<retrofit.client.Header> headersList = response.getHeaders();
-                    Iterator<retrofit.client.Header> iterator = headersList.iterator();
-                    while (iterator.hasNext()) {
-                        retrofit.client.Header header = iterator.next();
-                        Log.d("Header ", header.toString());
-                    }
-                } else if (response.getStatus() == HttpStatus.SC_FORBIDDEN) {
-
-                    try {
-                        System.out.println("the error message "+getStringFromInputStream(response.getBody().in()));
-                        errorStringJSON=getStringFromInputStream(response.getBody().in());
-                    } catch (IOException e) {
-                        Log.e("ERROR", "BAD Request -Invalid Parameter of Data Integrity Issue");
-                    }
-                    MFErrorResponse mfErrorResponse = null;
-                    /*try {*/
-                    mfErrorResponse = new Gson().fromJson(errorStringJSON, MFErrorResponse.class);
-
-                    System.out.println("the default user message is " + mfErrorResponse.getDefaultUserMessage());
-                  /*Toast.makeText(Constants.applicationContext.getApplicationContext(), mfErrorResponse.getDefaultUserMessage(), Toast.LENGTH_LONG).show();*/
-                    userErrorMessage=mfErrorResponse.getDefaultUserMessage();
-                    Log.d("Status", "Bad Request - Invalid Parameter or Data Integrity Issue.");
-                    Log.d("URL", response.getUrl());
-                   /* } catch (IOException e) {
-                        e.printStackTrace();
-                    }*/
-                    List<retrofit.client.Header> headersList = response.getHeaders();
-                    Iterator<retrofit.client.Header> iterator = headersList.iterator();
-                    while (iterator.hasNext()) {
-                        retrofit.client.Header header = iterator.next();
-                        Log.d("Header ", header.toString());
-                    }
-
-                }
-
-            }
-            else
-            {
-                userErrorMessage="No Connection...";
-            }
-
-
-
-            return retrofitError;
-        }
-
-    }
-
-    private static String getStringFromInputStream(InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return sb.toString();
-
-    }
-
 }

@@ -6,6 +6,8 @@
 package com.mifos.utils;
 
 
+import com.mifos.utils.MFError;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

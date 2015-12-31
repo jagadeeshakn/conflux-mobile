@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mifos.mifosxdroid.fragments.ClientTransferFragment">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:id="@+id/tv_group_name"
+    android:textStyle="bold"
+    android:gravity="center"
+    android:text="Group Name"
+    android:layout_marginTop="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"/>
+    <AutoCompleteTextView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_below="@id/tv_group_name"
+        android:id="@+id/ac_tv_search_group"
+        android:hint="Enter Denstination Group"
+        android:background="@drawable/edit_textbox_style"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_below="@id/ac_tv_search_group"
+        android:layout_height="wrap_content"
+        android:id="@+id/chk_inherit_group_loan_officer"
+        android:text="Inherit group loan officer"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Transfer"
+        android:textColor="#ffffff"
+        android:id="@+id/btn_transfer_clients"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chk_inherit_group_loan_officer"
+        android:id="@+id/list_transfer_clients"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"/>
+
+</RelativeLayout>

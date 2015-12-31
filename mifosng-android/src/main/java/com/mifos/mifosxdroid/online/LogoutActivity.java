@@ -15,6 +15,9 @@ import android.util.Log;
 
 import com.mifos.mifosxdroid.SplashScreenActivity;
 import com.mifos.objects.User;
+import com.mifos.objects.db.Permissions;
+
+import java.util.List;
 
 /**
  * Logout activity.
@@ -36,6 +39,7 @@ public class LogoutActivity extends ActionBarActivity {
         editor.putString(User.AUTHENTICATION_KEY, NA);
         editor.commit();
         editor.apply();
+        Permissions.deleteAll(Permissions.class);
         startActivity(new Intent(LogoutActivity.this, SplashScreenActivity.class));
         finish();
     }

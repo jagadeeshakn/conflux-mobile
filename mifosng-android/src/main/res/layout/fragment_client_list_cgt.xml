@@ -1,0 +1,155 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mifos.mifosxdroid.fragments.ClientListCgtFragment">
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingRight="20dp"
+                android:paddingLeft="10dp"
+                android:id="@+id/days"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="2"
+                    android:textStyle="bold"
+                    android:text="Center Name"
+                    android:id="@+id/tv_group_names"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:weightSum="2">
+                       <TextView
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:text="Day - 1"
+                           android:gravity="left"
+                           android:id="@+id/day_count"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="right"
+                            android:layout_weight="1"
+                            android:paddingRight="10dp">
+                             <TextView
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:text="Planned Date : " />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Date"
+                                    android:id="@+id/planned_date"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center"
+           android:paddingTop="10dp"
+           android:weightSum="1"
+           android:layout_below="@id/days"
+           android:id="@+id/center_name"
+           android:orientation="vertical">
+
+           <TextView
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:layout_marginTop="5dp"
+               android:gravity="center_horizontal"
+               android:id="@+id/cgt_note"
+               android:text="Note:"/>
+
+       </LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:layout_below="@id/center_name"
+            android:id="@+id/sc_cgt_client_list"
+            android:visibility="gone">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/cgt_attendance">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/client_list_header"
+                    android:orientation="vertical"/>
+                <com.mifos.mifosxdroid.uihelpers.NonScrollableListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/client_list"
+                    android:orientation="vertical"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comment :"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="100dp"
+                    android:inputType="textMultiLine"
+                    android:ems="4"
+                    android:padding="10dp"
+                    android:id="@+id/et_comments"
+                    android:background="@drawable/comment_box"
+                    android:gravity="top"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="10dp" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#ffffff"
+                    android:gravity="center"
+                    android:id="@+id/submit_cgt"
+                    android:text="Submit"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layout_cgt_info">
+                    <com.mifos.mifosxdroid.uihelpers.NonScrollableListView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/cgt_info_list"
+                        android:orientation="horizontal"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+       <ScrollView
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:id="@+id/sc_cgt_info"
+           android:layout_below="@id/center_name"
+           android:visibility="gone">
+           <com.mifos.mifosxdroid.uihelpers.NonScrollableListView
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:id="@+id/cgt_info"
+               android:orientation="vertical"/>
+       </ScrollView>
+
+
+   </RelativeLayout>
+</FrameLayout>

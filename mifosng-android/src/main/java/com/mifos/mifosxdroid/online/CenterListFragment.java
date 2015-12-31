@@ -6,11 +6,13 @@
 package com.mifos.mifosxdroid.online;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +43,6 @@ import retrofit.client.Response;
  */
 public class CenterListFragment extends Fragment {
 
-    private static final String TAG = "CenterListFragment";
 
     private View rootView;
     private ListView lv_centers_list;
@@ -52,6 +53,7 @@ public class CenterListFragment extends Fragment {
     private CentersListAdapter centersListAdapter;
 
     private OnFragmentInteractionListener mListener;
+    private  final String TAG=getClass().getSimpleName();
 
     public CenterListFragment(){
 
@@ -69,9 +71,10 @@ public class CenterListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_centers_list,container,false);
+        Log.i(TAG,"view has been been created successfully");
 
         actionBarActivity = (ActionBarActivity) getActivity();
-
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setSubtitle(R.string.center);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(actionBarActivity);
 
         setupUI();
@@ -91,7 +94,7 @@ public class CenterListFragment extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                        mListener.loadGroupsOfCenter(centers.get(i).getId());
+                        mListener.loadGroupsOfCenter(centers.get(i).getId(),centers.get(i).getName(),centers.get(i).getOfficeId(),centers.get(i).getOfficeName());
 
                     }
                 });
@@ -156,7 +159,7 @@ public class CenterListFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
 
-        public void loadGroupsOfCenter(int centerId);
+        public void loadGroupsOfCenter(int centerId,String centerName,int officeId,String officeName);
         public void loadCollectionSheetForCenter(int centerId, String collectionDate, int calenderInstanceId);
 
     }
@@ -165,10 +168,10 @@ public class CenterListFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        menu.findItem(R.id.mItem_search).setIcon(
+     /*   menu.findItem(R.id.mItem_search).setIcon(
                 new IconDrawable(getActivity(), Iconify.IconValue.fa_search)
                 .colorRes(R.color.black)
-                .actionBarSize());
+                .actionBarSize());*/
 
     }
 
@@ -177,9 +180,11 @@ public class CenterListFragment extends Fragment {
 
         int id = item.getItemId();
 
-        if (id == R.id.mItem_search) {
+        if (id == R.id.logout) {
 
+            startActivity(new Intent(getActivity(), LogoutActivity.class));
             getActivity().finish();
+
 
         }
 

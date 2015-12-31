@@ -23,7 +23,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -142,7 +141,6 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
     InputStream inputStream;
 
 
-
     View rootView;
 
     SafeUIBlockingUtility safeUIBlockingUtility;
@@ -162,11 +160,12 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
 
     private AccountAccordion accountAccordion;
 
-    /**Image Loading Task for this instance
-      Creating an instance object because if the fragment detaches itself from the activity
-      The task might throw IllegalStateException
-      So it is important to kill the task before the fragment detaches itself from the activity
-    */
+    /**
+     * Image Loading Task for this instance
+     * Creating an instance object because if the fragment detaches itself from the activity
+     * The task might throw IllegalStateException
+     * So it is important to kill the task before the fragment detaches itself from the activity
+     */
     private ImageLoadingAsyncTask imageLoadingAsyncTask;
 
     public ClientDetailsFragment() {
@@ -239,7 +238,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
     @Override
     public void onDetach() {
 
-        if(imageLoadingAsyncTask != null) {
+        if (imageLoadingAsyncTask != null) {
 
             if (!imageLoadingAsyncTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
                 imageLoadingAsyncTask.cancel(true);
@@ -296,8 +295,8 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
         menu.clear();
         MenuItem mItemSearchClient = menu.add(Menu.NONE, MENU_ITEM_SEARCH, Menu.NONE, getString(R.string.search));
         mItemSearchClient.setIcon(new IconDrawable(getActivity(), Iconify.IconValue.fa_search)
-        .colorRes(R.color.black)
-        .actionBarSize());
+                .colorRes(R.color.black)
+                .actionBarSize());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             mItemSearchClient.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         }
@@ -385,7 +384,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
     }
 
     public void deleteClientImage() {
-        ((MifosApplication)getActivity().getApplication()).api.clientService.deleteClientImage(clientId, new Callback<Response>() {
+        ((MifosApplication) getActivity().getApplication()).api.clientService.deleteClientImage(clientId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 Toast.makeText(activity, "Image deleted", Toast.LENGTH_SHORT).show();
@@ -411,38 +410,36 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
 
     /**
      * A service to upload the image of the client.
+     *
      * @param pngFile - PNG images supported at the moment
      */
-    private void uploadImage(File  pngFile) {
+    private void uploadImage(File pngFile) {
 
         final String imagePath = pngFile.getAbsolutePath();
         pb_imageProgressBar.setVisibility(View.VISIBLE);
-        ((MifosApplication)getActivity().getApplication()).api.clientService.uploadClientImage(clientId,
-                new  TypedFile("image/png", pngFile),
+        ((MifosApplication) getActivity().getApplication()).api.clientService.uploadClientImage(clientId,
+                new TypedFile("image/png", pngFile),
                 new Callback<Response>() {
 
 
                     @Override
                     public void success(Response response, Response response2) {
                         Toast.makeText(activity, activity.getString(R.string.client_image_updated), Toast.LENGTH_SHORT).show();
-                        System.out.println("image path "+imagePath);
-                        Bitmap  bitMap = BitmapFactory.decodeFile(imagePath);
-                        System.out.println("bitmap " + bitMap.toString());
+                        Bitmap bitMap = BitmapFactory.decodeFile(imagePath);
                         iv_clientImage.setImageBitmap(bitMap);
                         pb_imageProgressBar.setVisibility(View.GONE);
 
-                        File file=new File(imagePath);
+                        File file = new File(imagePath);
                         BufferedReader reader = null;
                         StringBuilder text = new StringBuilder();
                         try {
                             reader = new BufferedReader(new FileReader(file));
                             String str;
-                            if (imagePath!=null) {
+                            if (imagePath != null) {
                                 while ((str = reader.readLine()) != null) {
-                                    text.append(str + "\n" );
+                                    text.append(str + "\n");
                                 }
                             }
-                            System.out.println("image path file content " + text);
                             reader.close();
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
@@ -470,7 +467,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
 
         safeUIBlockingUtility.safelyBlockUI();
 
-        ((MifosApplication)getActivity().getApplication()).api.clientService.getClient(clientId, new Callback<Client>() {
+        ((MifosApplication) getActivity().getApplication()).api.clientService.getClient(clientId, new Callback<Client>() {
             @Override
             public void success(final Client client, Response response) {
 
@@ -490,7 +487,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
                         String dateString = df.format(date);
                         tv_activationDate.setText(dateString);
 
-                    }catch (IndexOutOfBoundsException e) {
+                    } catch (IndexOutOfBoundsException e) {
                         Toast.makeText(getActivity(), getString(R.string.error_client_inactive), Toast.LENGTH_SHORT).show();
                         tv_activationDate.setText("");
                     } catch (ParseException e) {
@@ -503,10 +500,8 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
                     // receiving a 200 response with image bytes. Perhaps we need to change the
                     // argument type from TypedFile to something else?
                     if (client.isImagePresent()) {
-                        System.out.println("Image is present");
 
                         imageLoadingAsyncTask = new ImageLoadingAsyncTask();
-                        System.out.println("the image id is"+client.getImageId());
                         imageLoadingAsyncTask.execute(client.getId());
 
                     }
@@ -564,7 +559,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
 
         safeUIBlockingUtility.safelyBlockUI();
 
-        ((MifosApplication)getActivity().getApplication()).api.clientAccountsService.getAllAccountsOfClient(clientId, new Callback<ClientAccounts>() {
+        ((MifosApplication) getActivity().getApplication()).api.clientAccountsService.getAllAccountsOfClient(clientId, new Callback<ClientAccounts>() {
             @Override
             public void success(final ClientAccounts clientAccounts, Response response) {
 
@@ -632,7 +627,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
     public void inflateDataTablesList() {
 
         safeUIBlockingUtility.safelyBlockUI();
-        ((MifosApplication)getActivity().getApplication()).api.dataTableService.getDatatablesOfClient(new Callback<List<DataTable>>() {
+        ((MifosApplication) getActivity().getApplication()).api.dataTableService.getDatatablesOfClient(new Callback<List<DataTable>>() {
             @Override
             public void success(List<DataTable> dataTables, Response response) {
 
@@ -771,7 +766,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
                 final Location location = mLocationClient.getLastLocation();
 
 
-                ((MifosApplication)getActivity().getApplication()).api.gpsCoordinatesService.setGpsCoordinates(clientId,
+                ((MifosApplication) getActivity().getApplication()).api.gpsCoordinatesService.setGpsCoordinates(clientId,
                         new GpsCoordinatesRequest(location.getLatitude(), location.getLongitude()),
                         new Callback<GpsCoordinatesResponse>() {
                             @Override
@@ -792,7 +787,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
                                  */
                                 if (retrofitError.getResponse().getStatus() == HttpStatus.SC_FORBIDDEN && retrofitError.getResponse().getBody().toString().contains("already exists")) {
 
-                                    ((MifosApplication)getActivity().getApplication()).api.gpsCoordinatesService.updateGpsCoordinates(clientId,
+                                    ((MifosApplication) getActivity().getApplication()).api.gpsCoordinatesService.updateGpsCoordinates(clientId,
                                             new GpsCoordinatesRequest(location.getLatitude(), location.getLongitude()),
                                             new Callback<GpsCoordinatesResponse>() {
                                                 @Override
@@ -878,18 +873,17 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
         @Override
         protected Void doInBackground(Integer... integers) {
             Log.d(TAG, "In background now");
-            ((MifosApplication) getActivity().getApplication()).api.clientService.getClientImage(integers[0],150,120, new Callback<Response>() {
+            ((MifosApplication) getActivity().getApplication()).api.clientService.getClientImage(integers[0], 150, 120, new Callback<Response>() {
                 @Override
                 public void success(Response response, Response response2) {
                     try {
-                        InputStream inputStream=response.getBody().in();
-                        byte[] b= IOUtils.toByteArray(inputStream);
+                        InputStream inputStream = response.getBody().in();
+                        byte[] b = IOUtils.toByteArray(inputStream);
                         //getting the image in the application/octet-stream format and converting it to Bitmap to set it to image view
-                        bmp=BitmapFactory.decodeByteArray(b,0,b.length);
+                        bmp = BitmapFactory.decodeByteArray(b, 0, b.length);
                         if (bmp != null) {
                             iv_clientImage.setImageBitmap(bmp);
                         } else {
-                            System.out.println("bmp is null");
                             iv_clientImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_launcher));
                         }
                     } catch (IOException e) {
@@ -934,19 +928,19 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
             }
 
             public TextView getTextView(Activity context) {
-                return (TextView)getSectionView(context).findViewById(R.id.tv_toggle_accounts);
+                return (TextView) getSectionView(context).findViewById(R.id.tv_toggle_accounts);
             }
 
             public TextView getIconView(Activity context) {
-                return (TextView)getSectionView(context).findViewById(R.id.tv_toggle_accounts_icon);
+                return (TextView) getSectionView(context).findViewById(R.id.tv_toggle_accounts_icon);
             }
 
             public ListView getListView(Activity context) {
-                return (ListView)getSectionView(context).findViewById(R.id.lv_accounts);
+                return (ListView) getSectionView(context).findViewById(R.id.lv_accounts);
             }
 
             public TextView getCountView(Activity context) {
-                return (TextView)getSectionView(context).findViewById(R.id.tv_count_accounts);
+                return (TextView) getSectionView(context).findViewById(R.id.tv_count_accounts);
             }
 
             public View getSectionView(Activity context) {
@@ -1006,7 +1000,7 @@ public class ClientDetailsFragment extends Fragment implements GooglePlayService
                 }
 
                 if (listView != null) {
-                    //This is used to handle touch events on the list view and consume them without
+                    //This is used to handle touch events on the incomeList view and consume them without
                     //passing onto scroll view
                     listView.setOnTouchListener(new View.OnTouchListener() {
                         @Override

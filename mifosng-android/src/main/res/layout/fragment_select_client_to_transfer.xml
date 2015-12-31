@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginRight="0dp"
+    android:background="@color/white">
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="@string/group_name"
+        android:id="@+id/tv_group_name"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:elevation="5dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Next"
+        android:textColor="#ffffff"
+        android:id="@+id/btn_selected_clients"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/listview_selector"
+        android:divider="@color/common_action_bar_splitter"
+        android:dividerHeight="2sp"
+        android:layout_below="@id/tv_group_name"
+        android:layout_above="@id/btn_selected_clients"
+        android:id="@+id/list_clients"/>
+
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/mItem_add_new_client"
+        android:title="@string/add_new_client"
+        app:showAsAction="always"
+        android:icon="@drawable/addclient" />
+    <item android:id="@+id/mItem_manage_client"
+        android:title="@string/mange_clients"
+        app:showAsAction="never" />
+    <item android:id="@+id/mItem_transfer_client"
+        android:title="@string/transfer_client"
+        app:showAsAction="never"/>
+</menu>

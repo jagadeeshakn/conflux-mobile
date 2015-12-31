@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp">
+    <LinearLayout
+        android:id="@+id/rl_first_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <Spinner
+            android:id="@+id/sp_income_spinners"
+            android:layout_width="165dp"
+            android:layout_height="43dp"
+            android:layout_marginRight="6dp"
+            android:layout_weight="0.05"
+            android:background="@drawable/spinner_bg"
+            android:paddingRight="20dp" />
+
+        <EditText
+            android:id="@+id/et_income_amounts"
+            android:layout_width="0dp"
+            android:layout_height="41dp"
+            android:layout_weight="0.95"
+            android:paddingTop="7dp"
+            android:background="@drawable/edit_box"
+            android:cursorVisible="true"
+            android:ellipsize="start"
+            android:focusable="true"
+            android:gravity="right"
+            android:inputType="numberDecimal" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:background="@drawable/createnewclient">
+
+                <ImageView
+            android:id="@+id/iv_clientImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="false"
+            android:paddingBottom="8dp"
+            android:paddingRight="8dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_dp_placeholder"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_fullName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/iv_clientImage"
+            android:text="@string/new_client"
+            android:textSize="24dp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/bt_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/selector_with_transparencey"
+            android:focusable="true"
+            android:onClick="loadAadharScanner"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/tv_fullName"
+            android:layout_alignRight="@+id/tv_fullName"
+            android:layout_alignEnd="@+id/tv_fullName"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp" />
+
+        <TextView
+            android:id="@+id/tv_uid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_clientImage"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="UID Number"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_uid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_uid"
+            android:background="#f3f3f3"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_client_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_uid"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="First Name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_client_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_client_first_name"
+            android:background="#f3f3f3"
+            android:inputType="textNoSuggestions"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_client_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_client_first_name"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="Last Name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_client_last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_client_last_name"
+            android:background="#f3f3f3"
+            android:inputType="textNoSuggestions"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_fname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_client_last_name"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="Father Name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_fname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_fname"
+            android:background="#f3f3f3"
+            android:inputType="textNoSuggestions"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_fname"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="Date Of Birth"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_dob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_dob"
+            android:background="#f3f3f3"
+            android:clickable="true"
+            android:paddingTop="10dp" />
+
+        <ImageButton
+            android:id="@+id/edit_dob"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/et_fname"
+            android:layout_toRightOf="@+id/tv_dob"
+            android:background="#00ffffff" />
+
+        <TextView
+            android:id="@+id/tv_gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_dob"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="Gender"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <Spinner
+            android:id="@+id/sp_gender"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_gender"
+            android:background="#f3f3f3"
+            android:entries="@array/gender_name"
+            android:paddingTop="10dp"
+            android:spinnerMode="dropdown" />
+
+        <TextView
+            android:id="@+id/tv_office"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sp_gender"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="Office"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <Spinner
+            android:id="@+id/sp_offices"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_office"
+            android:background="#f3f3f3"
+            android:paddingTop="10dp"
+            android:spinnerMode="dropdown" />
+
+        <CheckBox
+            android:id="@+id/cb_client_active_status"
+            android:layout_width="276dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sp_offices"
+            android:layout_marginTop="10dp"
+            android:checked="false"
+            android:gravity="start"
+            android:paddingTop="6dp"
+            android:text="Client Active " />
+        <TextView
+            android:id="@+id/line_submission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           android:layout_below="@id/cb_client_active_status"
+            android:visibility="gone">
+            </TextView>
+
+        <TextView
+            android:id="@+id/tv_submission_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cb_client_active_status"
+            android:paddingTop="10dp"
+            android:textSize="15sp" />
+
+
+        <ImageButton
+            android:id="@+id/edit_submission_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sp_offices"
+            android:layout_toRightOf="@+id/cb_client_active_status"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/bt_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cb_client_active_status"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/bt_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/bt_next"
+            android:layout_below="@+id/cb_client_active_status"
+            android:layout_toRightOf="@+id/bt_next"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/bt_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/bt_save"
+            android:layout_below="@+id/cb_client_active_status"
+            android:layout_toRightOf="@+id/bt_save"
+            android:background="#00ffffff" />
+
+        <ImageButton
+            android:id="@+id/bt_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/bt_check"
+            android:layout_below="@+id/cb_client_active_status"
+            android:layout_toRightOf="@+id/bt_check"
+            android:background="#00ffffff" />
+
+
+    </RelativeLayout>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/createnewclient"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/tv_village"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="Village"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_village"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f3f3f3"
+            android:inputType="textNoSuggestions"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_po"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="Post Office Name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_po"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f3f3f3"
+            android:inputType="textNoSuggestions"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_dist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="District"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_dist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f3f3f3"
+            android:inputType="textNoSuggestions"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="State"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f3f3f3"
+            android:inputType="textNoSuggestions"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:id="@+id/tv_pin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/abc_action_bar_up_description"
+            android:paddingTop="10dp"
+            android:text="Pincode"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/et_pin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f3f3f3"
+            android:paddingTop="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+</ScrollView>
+

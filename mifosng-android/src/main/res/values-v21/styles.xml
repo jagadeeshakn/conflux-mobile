@@ -8,11 +8,9 @@
 </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="displayOptions">useLogo|showHome|showTitle</item>
-        <item name="logo">@mipmap/ic_launcher</item>
-        <item name="android:previewImage">@mipmap/ic_launcher</item>
+
+        <!-- Customize your theme here. -->
     </style>
+
 
 </resources>

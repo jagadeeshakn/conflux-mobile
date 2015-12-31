@@ -5,24 +5,37 @@
 
 package com.mifos.mifosxdroid.online;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mifos.mifosxdroid.R;
 import com.mifos.mifosxdroid.adapters.ClientNameListAdapter;
+import com.mifos.objects.CgtData;
+import com.mifos.objects.GrtData;
 import com.mifos.objects.client.Client;
 import com.mifos.objects.client.Page;
+import com.mifos.objects.client.Permission;
+import com.mifos.objects.db.Permissions;
+import com.mifos.objects.group.Group;
+import com.mifos.services.API;
+import com.mifos.services.TestAPI;
 import com.mifos.utils.Constants;
 import com.mifos.utils.MifosApplication;
 
@@ -36,6 +49,7 @@ import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import butterknife.OnClick;
 
 
 /**
@@ -46,9 +60,15 @@ public class ClientListFragment extends Fragment {
 
     @InjectView(R.id.lv_clients)
     ListView lv_clients;
-    @InjectView(R.id.swipe_container)
-    SwipeRefreshLayout swipeRefreshLayout;
     View rootView;
+    @InjectView(R.id.buttons)
+    LinearLayout buttons;
+    @InjectView(R.id.user_with_cgt_grt_permission)
+    LinearLayout userWith_cgt_grt_Permission;
+    @InjectView(R.id.user_with_grt_permission)
+    LinearLayout userWith_grt_Permission;
+    @InjectView(R.id.user_with_cgt_permission)
+    LinearLayout userWith_cgt_Permission;
 
     List<Client> clientList = new ArrayList<Client>();
     private Context context;
@@ -59,6 +79,12 @@ public class ClientListFragment extends Fragment {
     //listOffset is used for stting the limit of the api to limit the call to the server till the listoffset is reached to limit-10
     private int listOffset=0;
     private int listLimitOffset=limit;
+    private  int centerId;
+    private  int groupId;
+    int officeId;
+    private String groupName;
+    private OnFragmentInteractionListener mListener;
+    private final String TAG = getClass().getSimpleName();
 
 
     private boolean isInfiniteScrollEnabled = true;
@@ -67,19 +93,35 @@ public class ClientListFragment extends Fragment {
 
     }
 
-    public static ClientListFragment newInstance(List<Client> clientList) {
+    public static ClientListFragment newInstance(int centerId,int groupId,String groupName,int officeId,List<Client> clientList) {
         ClientListFragment clientListFragment = new ClientListFragment();
         clientListFragment.setClientList(clientList);
+        clientListFragment.centerId=centerId;
+        clientListFragment.groupId=groupId;
+        clientListFragment.groupName=groupName;
+        clientListFragment.officeId=officeId;
+        clientListFragment.setInfiniteScrollEnabled(false);
         return clientListFragment;
     }
 
-    public static ClientListFragment newInstance(List<Client> clientList, boolean isParentFragmentAGroupFragment) {
+    public static ClientListFragment newInstance(int centerid,int groupId,String groupName,int officeId,List<Client> clientList, boolean isParentFragmentAGroupFragment) {
         ClientListFragment clientListFragment = new ClientListFragment();
         clientListFragment.setClientList(clientList);
+        clientListFragment.centerId=centerid;
+        clientListFragment.groupId=groupId;
+        clientListFragment.groupName=groupName;
+        clientListFragment.officeId=officeId;
         if (isParentFragmentAGroupFragment) {
             clientListFragment.setInfiniteScrollEnabled(false);
         }
         return clientListFragment;
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
 
@@ -90,24 +132,114 @@ public class ClientListFragment extends Fragment {
         setHasOptionsMenu(true);
         context = getActivity().getApplicationContext();
         ButterKnife.inject(this, rootView);
-
-        swipeRefreshLayout.setColorScheme(R.color.blue_light,
-                R.color.green_light,
-                R.color.orange_light,
-                R.color.red_light);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                //Do Nothing For Now
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
-        fetchClientList();
-
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setSubtitle(R.string.client);
+        //read the permissions table to retrieve the user permissions.
+        List<Permissions> associatedPermission=Permissions.listAll(Permissions.class);
+        List<String> listUserPermissions=new ArrayList<String>();
+        for(Permissions permission:associatedPermission)
+        {
+            listUserPermissions.add(permission.getPermissions());
+        }
+        if(listUserPermissions.contains(Constants.ALL_FUNCTIONS)||(listUserPermissions.contains(Constants.USER_CGT_WRITE_PERMISSSION)&&listUserPermissions.contains(Constants.USER_GRT_WRITE_PERMISSION)))
+        {
+            buttons.setVisibility(View.VISIBLE);
+            userWith_cgt_grt_Permission.setVisibility(View.VISIBLE);
+        }
+        else if(listUserPermissions.contains(Constants.USER_GRT_WRITE_PERMISSION))
+        {
+            buttons.setVisibility(View.VISIBLE);
+            userWith_grt_Permission.setVisibility(View.VISIBLE);
+        }
+        else if(listUserPermissions.contains(Constants.USER_CGT_WRITE_PERMISSSION))
+        {
+            buttons.setVisibility(View.VISIBLE);
+            userWith_cgt_Permission.setVisibility(View.VISIBLE);
+        }
+        if(!clientList.isEmpty()) {
+            fetchClientList();
+        }
+        else
+        {
+            Toast.makeText(getActivity(),"There are no members in this group",Toast.LENGTH_LONG).show();
+        }
         return rootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.client_list_fragment_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.mItem_add_new_client : Log.d(TAG,"Create new client option has been selected");
+                break;
+            case R.id.mItem_manage_client: Log.d(TAG,"Manage clients option has been selected");
+                mListener.loadManageClientsFragment(centerId, groupId,groupName,officeId,clientList);
+                break;
+            case R.id.mItem_transfer_client:Log.d(TAG,"Menu item Transfer Client has been Selected");
+                mListener.loadTransferClientFragment(centerId,groupId,groupName,officeId,clientList);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @OnClick(R.id.cgt)
+    public void requestforCGT(View view)
+    {
+        TestAPI testAPI=new TestAPI();
+        testAPI.cgt.getCgt(new Callback<List<CgtData>>() {
+            @Override
+            public void success(List<CgtData> cgtDatas, Response response) {
+
+                mListener.loadCGTFragmentForTheGroup(centerId, groupId, groupName, cgtDatas, clientList);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(getActivity(), "Failure :" + API.userErrorMessage, Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
+
+    @OnClick(R.id.grt)
+    public void loadGrtFragment(View view)
+    {
+        TestAPI testAPI = new TestAPI();
+        testAPI.grt.getGrt(new Callback<GrtData>() {
+            @Override
+            public void success(GrtData grtData, Response response) {
+                mListener.loadGRTFragmentFortheGroup(centerId, groupId, groupName, officeId, grtData, clientList);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(getActivity(), "Failure :" + API.userErrorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+                   /*     } else {
+                            Toast.makeText(getActivity(), "There was some error fetching incomeList.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (NullPointerException npe) {
+                        Toast.makeText(getActivity(), "There is some problem with your internet connection.", Toast.LENGTH_SHORT).show();*/
     public void inflateClientList() {
 
         final ClientNameListAdapter clientNameListAdapter = new ClientNameListAdapter(context, clientList,((MifosApplication)getActivity().getApplication()).api);
@@ -124,95 +256,17 @@ public class ClientListFragment extends Fragment {
             }
         });
 
-
-        lv_clients.setOnScrollListener(new AbsListView.OnScrollListener() {
-            private int mLastFirstVisibleItem;
-
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (mLastFirstVisibleItem < firstVisibleItem) {
-                    Log.i("SCROLLING DOWN", "TRUE");
-                    //firstvisible +visible count indicates how many items has been scrolled up and are visible at present to the user
-                    listOffset=firstVisibleItem+visibleItemCount;
-                    if(listOffset==totalItemCount) {
-                           getclientDetails(clientNameListAdapter);
-                    }
-                }
-                if (mLastFirstVisibleItem > firstVisibleItem) {
-                    listOffset=firstVisibleItem+visibleItemCount;
-                    Log.i("SCROLLING UP", "TRUE");
-                }
-                mLastFirstVisibleItem = firstVisibleItem;
-
-
-            }
-        });
-
-
     }
 
-    public void getclientDetails(final ClientNameListAdapter clientNameListAdapter)
-    {
-        offset += limit + 1;
-        swipeRefreshLayout.setRefreshing(true);
-
-        ((MifosApplication)getActivity().getApplication()).api.clientService.listAllClients(offset, limit, new Callback<Page<Client>>() {
-            @Override
-            public void success(Page<Client> clientPage, Response response) {
-
-                clientList.addAll(clientPage.getPageItems());
-                clientNameListAdapter.notifyDataSetChanged();
-                index = lv_clients.getFirstVisiblePosition();
-                View v = lv_clients.getChildAt(0);
-                top = (v == null) ? 0 : v.getTop();
-                lv_clients.setSelectionFromTop(index, top);
-                swipeRefreshLayout.setRefreshing(false);
-
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
-                swipeRefreshLayout.setRefreshing(false);
-
-                if (getActivity() != null) {
-                    try {
-                        Log.i("Error", "" + retrofitError.getResponse().getStatus());
-                        if (retrofitError.getResponse().getStatus() == HttpStatus.SC_UNAUTHORIZED) {
-                            Toast.makeText(getActivity(), "Authorization Expired - Please Login Again", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getActivity(), LogoutActivity.class));
-                            getActivity().finish();
-
-                        } else {
-                            Toast.makeText(getActivity(), "There was some error fetching list.", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (NullPointerException npe) {
-                        Toast.makeText(getActivity(), "There is some problem with your internet connection.", Toast.LENGTH_SHORT).show();
-
-                    }
-
-
-                }
-
-            }
-
-        });
-
-    }
 
     public void fetchClientList() {
 
-        //Check if ClientListFragment has a clientList
         if (clientList.size() > 0) {
             inflateClientList();
         } else {
 
-            swipeRefreshLayout.setRefreshing(true);
+
+            //swipeRefreshLayout.setRefreshing(true);
             //Get a Client List
             ((MifosApplication)getActivity().getApplication()).api.clientService.listAllClients(offset, limit,new Callback<Page<Client>>() {
                 @Override
@@ -220,14 +274,14 @@ public class ClientListFragment extends Fragment {
                     clientList = page.getPageItems();
                     inflateClientList();
                     offset=+limit+1;
-                    swipeRefreshLayout.setRefreshing(false);
+                    //swipeRefreshLayout.setRefreshing(false);
 
                 }
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
 
-                    swipeRefreshLayout.setRefreshing(false);
+                   // swipeRefreshLayout.setRefreshing(false);
 
                     if (getActivity() != null) {
                         try {
@@ -238,7 +292,7 @@ public class ClientListFragment extends Fragment {
                                 getActivity().finish();
 
                             } else {
-                                Toast.makeText(getActivity(), "There was some error fetching list.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "There was some error fetching incomeList.", Toast.LENGTH_SHORT).show();
                             }
                         } catch (NullPointerException npe) {
                             Toast.makeText(getActivity(), "There is some problem with your internet connection.", Toast.LENGTH_SHORT).show();
@@ -255,6 +309,12 @@ public class ClientListFragment extends Fragment {
 
     }
 
+    public interface OnFragmentInteractionListener {
+        public void loadCGTFragmentForTheGroup(int centerId,int groupId,String groupName,List<CgtData> cgtDatas,List<Client> clientList);
+        public void loadGRTFragmentFortheGroup(int centerId,int groupId,String groupName,int officeId,GrtData grtData,List<Client> clientList);
+        public void loadManageClientsFragment(int centerId,int groupId,String groupName,int officeId,List<Client> clientList);
+        public void loadTransferClientFragment(int centerId,int groupId,String groupName,int officeId,List<Client> clientList);
+    }
     public List<Client> getClientList() {
         return clientList;
     }

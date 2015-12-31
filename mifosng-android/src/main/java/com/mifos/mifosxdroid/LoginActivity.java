@@ -5,7 +5,6 @@
 
 package com.mifos.mifosxdroid;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,9 +14,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -25,12 +21,13 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mifos.exceptions.ShortOfLengthException;
 import com.mifos.mifosxdroid.online.DashboardFragmentActivity;
 import com.mifos.objects.User;
+import com.mifos.objects.db.UserDetails;
+import com.mifos.objects.db.Permissions;
 import com.mifos.objects.noncore.DisplayAlert;
 import com.mifos.services.API;
 import com.mifos.utils.Constants;
@@ -38,11 +35,7 @@ import com.mifos.utils.MifosApplication;
 
 import org.apache.http.HttpStatus;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 import javax.net.ssl.SSLHandshakeException;
 
@@ -123,10 +116,19 @@ public class LoginActivity extends ActionBarActivity implements Callback<User>{
     @Override
     public void success(User user, Response response) {
         ((MifosApplication) getApplication()).api = api;
+        Permissions permissions;
+        List<String> permission=user.getPermissions();
+        for(String eachPermission:permission)
+        {
+            permissions=new Permissions(eachPermission);
+            permissions.save();
+        }
+        UserDetails userDetails;
+        userDetails = new UserDetails(user.getUsername(),user.getUserId(),user.getOfficeId(),user.getOfficeName(),user.getStaffId());
+        userDetails.save();
         progressDialog.dismiss();
         Toast.makeText(context, getString(R.string.toast_welcome)+" " + user.getUsername(), Toast.LENGTH_SHORT).show();
         saveLastAccessedInstanceUrl(url);
-       // saveLastAccessedInstanceDomainName(url);
         String lastAccessedTenantIdentifier = TenantIdentifier;
         saveLastAccessedTenant(lastAccessedTenantIdentifier);
         saveAuthenticationKey("Basic " + user.getBase64EncodedAuthenticationKey());
@@ -193,10 +195,7 @@ public class LoginActivity extends ActionBarActivity implements Callback<User>{
         try {
             if ( url !=""||TenantIdentifier!="") {
                 if (validateUserInputs())
-
-                    Toast.makeText(context, "URL: " + url + "    Tenant:" + TenantIdentifier, Toast.LENGTH_LONG).show();
-
-
+                // Toast.makeText(context, "URL: " + url + "    Tenant:" + TenantIdentifier, Toast.LENGTH_LONG).show();
                 progressDialog.show();
                 //api = new API(instanceURL, et_tenantIdentifier.getEditableText().toString().trim(), shouldByPassSSLSecurity);
                 api = new API(url, TenantIdentifier, shouldByPassSSLSecurity);

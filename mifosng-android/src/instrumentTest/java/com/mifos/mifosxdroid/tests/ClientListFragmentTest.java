@@ -39,7 +39,7 @@ public class ClientListFragmentTest extends ActivityInstrumentationTestCase2<Das
         dashboardActivity = getActivity();
 
         //starting client list fragment
-        dashboardActivity.loadClientList();
+        //dashboardActivity.loadClientList();
 
         //API wait for charging all clients
         Thread.sleep(8000);

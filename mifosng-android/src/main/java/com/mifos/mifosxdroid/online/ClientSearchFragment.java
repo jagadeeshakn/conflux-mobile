@@ -92,34 +92,23 @@ public class ClientSearchFragment extends Fragment implements AdapterView.OnItem
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_client_search, null);
         ButterKnife.inject(this, rootView);
-        search();
+        //search();
         return rootView;
     }
 
+
 public void search()
 {
-    if (!searchQuery.isEmpty()) {
-       /* searchQuery = et_searchById.getEditableText().toString().trim();*/
-        findClients(searchQuery);
-
-    } else {
-        Toast.makeText(getActivity(), "No Search Query Entered!", Toast.LENGTH_SHORT).show();
-    }
-}
-    /*@OnClick(R.id.bt_searchClient)
-    public void performSearch() {
-
-        if (!et_searchById.getEditableText().toString().trim().isEmpty()) {
-            searchQuery = et_searchById.getEditableText().toString().trim();
+    if(!searchQuery.equals(null)) {
+        if (!searchQuery.isEmpty()) {
             findClients(searchQuery);
 
         } else {
             Toast.makeText(getActivity(), "No Search Query Entered!", Toast.LENGTH_SHORT).show();
         }
+    }
 
-
-    }*/
-
+}
 
     public void findClients(final String clientName) {
 
@@ -173,8 +162,6 @@ public void search()
     public void onPause() {
 
         //Fragment getting detached, keyboard if open must be hidden
-       /* hideKeyboard();*/
-        Toast.makeText(getActivity(),"search fragment resume",Toast.LENGTH_LONG).show();
         super.onPause();
     }
 
@@ -184,22 +171,24 @@ public void search()
         2. If user entered a search query and got some search results and went out of the app.
      */
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-       try{ if(searchQuery != null && !(searchQuery.equals(""))) {
-            outState.putString(TAG+searchQuery,searchQuery);
-        }
-
-    }catch(NullPointerException npe){
-        //Looks like edit text didn't get initialized properly
-    }
-
-    }
 
     @Override
     public void onDetach() {
         super.onDetach();
+
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        try{ if(searchQuery != null && !(searchQuery.equals(""))) {
+            outState.putString(TAG,searchQuery);
+        }
+
+        }catch(NullPointerException npe){
+            //Looks like edit text didn't get initialized properly
+            System.out.println("swarch query saveinstance state "+npe.getMessage());
+        }
+        super.onSaveInstanceState(outState);
+
 
     }
 
@@ -208,11 +197,14 @@ public void search()
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
 
-            String queryString = savedInstanceState.getString(TAG);
-
+            String queryString = (String)savedInstanceState.getString(TAG);
+                System.out.println("the query is " + queryString);
             if (queryString != null && !(queryString.equals(""))) {
-
+                searchQuery = queryString;
             }
+        }
+        else {
+            search();
         }
     }
 

@@ -22,6 +22,7 @@
 -dontwarn butterknife.internal.**
 -keep class **$$ViewInjector { *; }
 
+
 -keepclasseswithmembernames class * {
     @butterknife.* <fields>;
 }

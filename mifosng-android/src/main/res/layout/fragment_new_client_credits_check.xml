@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp"
+    android:paddingTop="2dp"
+    android:stretchColumns="1">
+
+    <TableRow>
+
+        <TextView
+            style="@style/FormLabel"
+            android:layout_column="1"
+            android:padding="3dip"
+            android:text="@string/No_of_loans" />
+
+        <TextView
+            android:id="@+id/tv_no_of_loans"
+            android:gravity="right"
+            android:hint="0.00"
+            android:padding="3dip"
+            android:textSize="15sp" />
+    </TableRow>
+
+    <View
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+
+    <TableRow>
+
+        <TextView
+            style="@style/FormLabel"
+            android:layout_column="1"
+            android:padding="3dip"
+            android:text="@string/indebtedness" />
+
+        <TextView
+            android:id="@+id/tv_indebtedness"
+            android:gravity="right"
+            android:hint="0.00"
+            android:padding="3dip"
+            android:textSize="15sp" />
+    </TableRow>
+
+    <View
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+
+    <TableRow>
+
+        <TextView
+            style="@style/FormLabel"
+            android:layout_column="1"
+            android:padding="3dip"
+            android:text="@string/No_of_MIFs" />
+
+        <TextView
+            android:id="@+id/tv_no_of_mifs"
+            android:gravity="right"
+            android:hint="0.00"
+            android:padding="3dip"
+            android:textSize="15sp" />
+    </TableRow>
+
+    <View
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+
+    <TableRow>
+
+        <TextView
+            style="@style/FormLabel"
+            android:layout_column="1"
+            android:padding="3dip"
+            android:text="@string/arrears" />
+
+        <TextView
+            android:id="@+id/tv_arrears"
+            android:gravity="right"
+            android:hint="0.00"
+            android:padding="3dip"
+            android:textSize="15sp" />
+    </TableRow>
+
+    <View
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+</TableLayout>

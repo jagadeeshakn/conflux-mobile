@@ -8,6 +8,7 @@
 
     <!-- General Terms Begin Here -->
     <string name="datatables">Datatables</string>
+    <string name="status">Status : </string>
     <string name="login">Login</string>
     <string name="search">Search</string>
     <string name="group_name">Group Name</string>
@@ -32,7 +33,7 @@
     <string name="account_number">Account Number</string>
     <string name="external_id">External ID</string>
     <string name="activation_date">Activation Date</string>
-    <string name="office">Office</string>
+    <string name="office">Office *</string>
     <string name="group">Group</string>
     <string name="cancel">Cancel</string>
     <string name="review_payment">Review Payment</string>
@@ -48,8 +49,8 @@
     <string name="file_location">Location</string>
     <string name="documents">Documents</string>
     <string name="collection_sheet">Collection Sheet</string>
-    <string name="meeting_date">Meeting Date</string>
-    <string name="center">Center</string>
+    <string name="meeting_date">Meeting Date *</string>
+    <string name="center">Center *</string>
     <string name="generate_collection_sheet">Generate Collection Sheet</string>
     <string name="clear_data">Clear Data</string>
     <string name="branch_id">Branch Id</string>
@@ -66,7 +67,7 @@
     <string name="create_center_name">Name *</string>
     <string name="office_name">Office *</string>
     <string name="center_activation">Activate Center</string>
-    <string name="submission_data">Submitted on</string>
+    <string name="submission_data">Submitted On</string>
     <string name="submit">submit</string>
     <string name="invalid_saff_name">Please Select a proper Staff Name.</string>
     <string name="is_invalid">is invalid. Please Select a proper Office.</string>
